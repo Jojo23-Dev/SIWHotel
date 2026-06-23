@@ -1,20 +1,33 @@
 package it.uniroma3.siw.siw_hotel.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+// in caso agggiungi @NamedQuery
 public class Credenziali {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(length = 40, nullable=false)
     private String email;
+
+    @Column(length = 40, nullable=false, unique=true)
     private String username;
+
+    @Column(length = 30, nullable=false)
     private String password;
+
+    @Column(nullable = false)
     private String ruolo;
+
+
+
 
     public String getEmail() {
         return email;

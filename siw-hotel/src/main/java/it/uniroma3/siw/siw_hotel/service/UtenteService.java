@@ -16,12 +16,13 @@ public class UtenteService {
 		this.utenteRepository = utenteRepository;
 	}
 
-	public Optional<Utente> findById(Long id) {
+	public Optional<Utente> getUtente(Long id) {
 		return this.utenteRepository.findById(id);
 	}
 
-	public Iterable<Utente> findAll() {
+	public Iterable<Utente> getUtenti() {
 		return this.utenteRepository.findAll();
-	}    
+	}
+	
 
 }

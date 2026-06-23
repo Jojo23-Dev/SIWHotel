@@ -17,11 +17,11 @@ public class CameraService {
 	}
 
 
-	public Optional<Camera> findById(Long id) {
+	public Optional<Camera> getCamera(Long id) {
 		return this.cameraRepository.findById(id);
 	}
 
-	public Iterable<Camera> findAll() {
+	public Iterable<Camera> getCamere() {
 		return this.cameraRepository.findAll();
 	}
 
