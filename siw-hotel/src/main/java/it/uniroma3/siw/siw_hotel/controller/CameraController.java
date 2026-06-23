@@ -14,17 +14,17 @@ public class CameraController {
 
     private CameraService cameraService;
     
-    @GetMapping("/movies/{id}")
+    @GetMapping("/camere/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("movie", this.cameraService.findById(id));
-    return "movies/show";
+        model.addAttribute("camera", this.cameraService.getCamera(id));
+    return "camere/show";
     }
 
-    @GetMapping("/movies")
+    @GetMapping("/camere")
     public String list(Model model) {
-        Iterable<Camera> allMovies = this.cameraService.findAll();
-        model.addAttribute("movies", allMovies);
-    return "movies/list";
+        Iterable<Camera> allMovies = this.cameraService.getCamere();
+        model.addAttribute("camere", allMovies);
+    return "camere/list";
     }
 
     

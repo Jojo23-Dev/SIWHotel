@@ -2,23 +2,41 @@ package it.uniroma3.siw.siw_hotel.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
+// in caso agggiungi @NamedQuery
 public class CameraPrenotata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idPrenotazione;
-    private Date dataCheckIn;
-    private Date dataCheckOut;
-    private String note;
 
-    private Utente cliente;
+    @Column(nullable=false)
+    private Date dataCheckIn;
+
+    @Column(nullable=false)
+    private Date dataCheckOut;
+
+    @Column(length = 2000)
+    private String note;
     
+
+    @ManyToOne
+    @Column(nullable=false)
+    private Utente cliente;
+
+    @ManyToOne
+    @Column(nullable=false)
+    private Camera camera;
+   
+   
+   
     public Long getIdPrenotazione() {
         return idPrenotazione;
     }

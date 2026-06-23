@@ -1,23 +1,45 @@
 package it.uniroma3.siw.siw_hotel.model;
 
+import java.util.*;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
+// in caso agggiungi @NamedQuery
 public class Camera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable=false)
     private double prezzo;
+
+    @Column(nullable=false)
     private String tipo;
+
+    @Column(nullable=false)
     private Long dimensione;
+
+    @Column(length = 2000)
     private String descrizione;
+
+    @Column(nullable=false)
     private Long letti;
+
+    @Column(nullable=false)
     private Long persone;
     
+    @OneToMany(mappedBy = "camera")
+    private Collection<CameraPrenotata> prenotazioni;
+
+
+
     public Long getId() {
         return id;
     }
