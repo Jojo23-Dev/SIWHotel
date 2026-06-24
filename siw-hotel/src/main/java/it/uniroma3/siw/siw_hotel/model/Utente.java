@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -23,7 +23,7 @@ public class Utente {
     private String nome,cognome;
 
     @OneToOne
-    @Column(nullable=false, unique=true)
+    @JoinColumn(nullable=false, unique=true)
     private Credenziali credenziali;
 
     @OneToMany(mappedBy = "cliente")
