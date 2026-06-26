@@ -10,17 +10,17 @@ import jakarta.persistence.Id;
 // in caso agggiungi @NamedQuery
 public class Credenziali {
 
+    public static final String DEFAULT_ROLE = "DEFAULT";
+    public static final String ADMIN_ROLE = "ADMIN";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 40, nullable=false)
-    private String email;
 
     @Column(length = 40, nullable=false, unique=true)
     private String username;
 
-    @Column(length = 30, nullable=false)
+    @Column(nullable=false)
     private String password;
 
     @Column(nullable = false)
@@ -28,13 +28,6 @@ public class Credenziali {
 
 
 
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
     public String getUsername() {
         return username;
     }
