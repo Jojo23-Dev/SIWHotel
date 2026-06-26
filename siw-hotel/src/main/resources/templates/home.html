@@ -30,23 +30,28 @@
 <div class="page-container">
     
     <div class="header-container">
-        <h1 class="title-text">Hotel Grand Luxury</h1>
+        <h1 class="title-text">Hotel</h1>
         <div sec:authorize="isAuthenticated()">
             <p>Benvenuto, gestore!</p>
+        </div>
+        <div>
+             <a th:href="@{/login}">Login &rarr;</a>
         </div>
     </div>
 
     <div id="camere-section">
         <h2>Le nostre Camere</h2>
         <div class="grid-container">
-            <div th:each="camera : ${camere}" 
-                 class="card" 
-                 th:onclick="|window.location.href='@{/camere/{id}(id=${camera.id})}'|">
+            <div th:each="camera : ${camere}"
+                class="card"
+                th:onclick="|window.location.href='@{/camere/{id}(id=${camera.id})}'|">
+
                 <h2 th:text="${camera.tipo}">Nome Camera</h2>
                 <div class="badge" th:text="${camera.tipo}">Standard</div>
                 <p>Prezzo: <span th:text="${camera.prezzo}">1000€</span></p>
             </div>
         </div>
+
         <div class="footer-link">
             <a th:href="@{/camere}">Vedi tutte le camere &rarr;</a>
         </div>
@@ -54,7 +59,7 @@
 
     <hr style="margin: 40px 0;">
 
-    <div id="offerte-section">
+<!--  <div id="offerte-section">
         <h2>Offerte Speciali</h2>
         <div class="grid-container">
             <div th:each="evento : ${eventi}" class="card">
@@ -62,12 +67,12 @@
                 <p th:text="${evento.descrizione}">Descrizione evento...</p>
             </div>
         </div>
-    </div>
+    </div> -->
 
 </div>
 
 <div class="page-footer">
-    <p>&copy; 2026 Hotel Grand Luxury - Prenotazioni Online</p>
+    <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
 </div>
 
 </body>

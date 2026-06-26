@@ -21,6 +21,9 @@ public class Utente {
 
     @Column(length = 80, nullable=false)
     private String nome,cognome;
+    
+    @Column(length = 40, nullable=false, unique=true)
+    private String email;
 
     @OneToOne
     @JoinColumn(nullable=false, unique=true)
@@ -48,6 +51,12 @@ public class Utente {
     }
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
     public Credenziali getCredenziali() {
         return credenziali;

@@ -24,5 +24,8 @@ public class UtenteService {
 		return this.utenteRepository.findAll();
 	}
 	
+	public Utente salvaUtente(Utente utente){
+		return this.utenteRepository.save(utente);
+	}
 
 }
