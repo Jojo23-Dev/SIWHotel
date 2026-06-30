@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Elenco Camere</title>
+    <style>
+        /* Struttura base per footer appiccicoso */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+
+        /* Griglia delle camere */
+        .camere-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .camera-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s;
+        }
+
+        .camera-card:hover { transform: scale(1.02); border-color: #0056b3; }
+
+        .camera-card h2 { margin-top: 0; color: #0056b3; }
+
+        /* Footer */
+        .page-footer {
+            background-color: #002244;
+            height: 60px;
+            width: 100%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+      <a th:href="@{/}" class="back-link">&larr; Torna alla home</a>
+    <h1>Elenco Camere</h1>
+
+    <div th:if="${camere.isEmpty()}">
+        <p>Non ci sono camere disponibili al momento.</p>
+    </div>
+
+    <div class="camere-grid">
+        <a th:each="camera : ${camere}" 
+           th:href="@{'/camere/' + ${camera.id}}" 
+           class="camera-card">
+            
+            <h2 th:text="${camera.tipo}">Nome Camera</h2>
+            <p>Tipologia: <span th:text="${camera.tipo}">Standard</span></p>
+            <p>Persone: <span th:text="${camera.persone}">1</span></p>
+            
+        </a>
+    </div>
+</div>
+
+<div class="page-footer">
+    <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
+</div>
+
+</body>
+</html>

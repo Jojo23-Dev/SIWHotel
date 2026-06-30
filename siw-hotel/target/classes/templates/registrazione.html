@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Grand Luxury - Registrazione</title>
+    <style>
+        /* Struttura base con Footer appiccicoso */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .page-container {
+            max-width: 650px;
+            margin: 40px auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- PULSANTE DI NAVIGAZIONE --- */
+        .nav-buttons {
+            display: flex;
+            margin-bottom: 25px;
+        }
+
+        .btn-nav {
+            padding: 10px 18px;
+            text-decoration: none;
+            color: #0056b3;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #0056b3;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-nav:hover {
+            background-color: #e6f0fa;
+        }
+
+        /* --- CARD DELLA REGISTRAZIONE --- */
+        .register-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e4e8;
+        }
+
+        .register-card h2 {
+            margin: 0 0 25px 0;
+            color: #002244;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        /* --- ERRORI DI VALIDAZIONE --- */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* --- FORM ELEMENTI --- */
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0056b3;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.2);
+        }
+
+        /* Stile specifico per affiancare prefisso e telefono */
+        .phone-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-container select {
+            width: 35%; /* La tendina occupa un terzo dello spazio */
+        }
+
+        .phone-container input {
+            width: 65%; /* Il numero occupa il resto */
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #003b80;
+        }
+
+        /* --- LINK AL LOGIN --- */
+        .login-redirect {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-redirect a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-redirect a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- FOOTER --- */
+        .page-footer {
+            background-color: #002244;
+            height: 80px;
+            width: 100%;
+            margin-top: auto;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <div class="nav-buttons">
+            <a class="btn-nav" th:href="@{/login}">&larr; Torna al Login</a>
+        </div>
+
+        <div class="register-card">
+            <h2>Crea il tuo Account</h2>
+
+            <div th:if="${param.error}" class="error-message">
+                Si è verificato un errore durante la registrazione. Controlla i dati.
+            </div>
+
+            <form th:action="@{/register}" method="POST">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Es. Mario" autofocus/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label th:for="cognome">Cognome</label>
+                        <input type="text" id="cognome" name="cognome" required placeholder="Es. Rossi"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="dataNascita">Data di Nascita</label>
+                        <input type="date" id="dataNascita" name="dataNascita" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="nazione">Nazione</label>
+                        <select id="nazione" name="nazione" required>
+                            <option value="" disabled selected>Seleziona...</option>
+                            <option value="IT">Italia</option>
+                            <option value="FR">Francia</option>
+                            <option value="DE">Germania</option>
+                            <option value="ES">Spagna</option>
+                            <option value="UK">Regno Unito</option>
+                            <option value="US">Stati Uniti</option>
+                            <option value="OTHER">Altro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="email">Indirizzo Email</label>
+                        <input type="email" id="email" name="email" required placeholder="es. mario.rossi@email.com"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="telefono">Telefono</label>
+                        <div class="phone-container">
+                            <select id="prefisso" name="prefisso" required>
+                                <option value="+39" selected>+39 (IT)</option>
+                                <option value="+33">+33 (FR)</option>
+                                <option value="+49">+49 (DE)</option>
+                                <option value="+34">+34 (ES)</option>
+                                <option value="+44">+44 (UK)</option>
+                                <option value="+1">+1 (US)</option>
+                            </select>
+                            <input type="tel" id="telefono" name="telefono" required placeholder="333 1234567"/>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+
+                <div class="form-group">
+                    <label th:for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Scegli un username"/>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Crea una password sicura"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="confermaPassword">Conferma Password</label>
+                        <input type="password" id="confermaPassword" name="confermaPassword" required placeholder="Ripeti la password"/>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Registrati</button>
+            </form>
+
+            <div class="login-redirect">
+                Hai già un profilo? <a th:href="@{/login}">Accedi qui</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="page-footer">
+        <p>&copy; 2026 Hotel Grand Luxury - Prenotazioni Online</p>
+    </div>
+
+</body>
+</html>

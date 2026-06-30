@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Camera ' + ${camera.tipo}">Dettaglio Camera</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .page-container { max-width: 900px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1; }
+        
+        .header-detail { border-bottom: 2px solid #0056b3; margin-bottom: 30px; padding-bottom: 20px; }
+        .header-detail h1 { color: #002244; margin: 0; font-size: 40px; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .info-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #0056b3; }
+        .info-box strong { display: block; color: #555; margin-bottom: 5px; }
+        
+        .btn-prenota { background-color: #008234; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.3s; }
+        .btn-prenota:hover { background-color: #006629; }
+        
+        .back-link { display: inline-block; margin-bottom: 20px; color: #0056b3; text-decoration: none; font-weight: 600; }
+        
+        .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <a th:href="@{/camere}" class="back-link">&larr; Torna all'elenco camere</a>
+    
+    <div class="header-detail">
+        <h1 th:text="${camera.tipo}">Nome Camera</h1>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-box">
+            <strong>Tipologia</strong>
+            <span th:text="${camera.tipo}">Standard</span>
+        </div>
+        <div class="info-box">
+            <strong>Persone</strong>
+            <span th:text="${camera.persone}">1</span>
+        </div>
+        <div class="info-box">
+            <strong>Letti</strong>
+            <span th:text="${camera.letti}">1</span>
+        </div>
+        <div class="info-box">
+            <strong>Dimensione</strong>
+            <span th:text="${camera.prezzo}">20mq</span>
+        </div>
+        <div class="info-box">
+            <strong>Prezzo</strong>
+            <span th:text="${camera.prezzo}">25€</span>
+        </div>
+     
+   
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3>Descrizione</h3>
+        <p th:text="${camera.descrizione}">Qui verrà visualizzata la descrizione completa della camera inserita nel database.</p>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <a th:href="@{/prenota/{id}(id=${camera.id})}" class="btn-prenota">Prenota ora questa camera</a>
+    </div>
+</div>
+
+<div class="page-footer">
+     <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
+
+</div>
+
+</body>
+</html>

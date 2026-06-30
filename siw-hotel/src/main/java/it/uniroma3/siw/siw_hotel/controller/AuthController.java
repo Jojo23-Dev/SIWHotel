@@ -11,8 +11,8 @@ public class AuthController {
         return "login"; // Cerca il file templates/login.html
     }
     
-    @GetMapping("/register")
+    @GetMapping("/registrazione")
     public String mostraRegistrazione() {
-        return "register"; // Cerca templates/register.html
+        return "registrazione"; // Cerca templates/registrazione.html
     }
 }

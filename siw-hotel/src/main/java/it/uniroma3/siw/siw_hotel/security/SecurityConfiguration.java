@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import static it.uniroma3.siw.siw_hotel.model.Credenziali.ADMIN_ROLE;
 
@@ -44,7 +43,7 @@ public class SecurityConfiguration {
     protected SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception {
     
         httpSecurity.authorizeHttpRequests(authorize -> {
-            authorize.requestMatchers(HttpMethod.GET, "/", "/camere", "/register", "/css/**", "/images/**",
+            authorize.requestMatchers(HttpMethod.GET, "/", "/camere", "/registrazione", "/area-personale", "/css/**", "/images/**",
                                             "/favicon.ico").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();
             authorize.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
@@ -54,7 +53,7 @@ public class SecurityConfiguration {
 
         httpSecurity.formLogin(form -> {
             form.loginPage("/login").permitAll();
-            form.defaultSuccessUrl("/success", true);
+            form.defaultSuccessUrl("/area-personale", true);
             form.failureUrl("/login?error=true");
         });
 
