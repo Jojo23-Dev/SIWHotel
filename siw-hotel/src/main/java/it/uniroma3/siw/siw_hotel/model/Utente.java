@@ -1,6 +1,7 @@
 package it.uniroma3.siw.siw_hotel.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,15 @@ public class Utente {
 
     @Column(length = 80, nullable=false)
     private String nome,cognome;
+
+    @Column(nullable=false)
+    private Date dataDiNascita;
+
+    @Column(nullable=false)
+    private String nazione;
+
+    @Column(length = 40, nullable=false)
+    private String telefono;
     
     @Column(length = 40, nullable=false, unique=true)
     private String email;

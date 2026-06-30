@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Management - Dashboard</title>
+    <style>
+        body { margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; }
+        .page-container { max-width: 1200px; margin: 0 auto; flex: 1; width: 100%; padding: 20px; box-sizing: border-box; }
+
+        /* Header */
+        .header-container { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid #0056b3; }
+        .title-text { color: #002244; margin: 0; }
+
+        /* Griglia a card */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 30px; }
+        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; transition: 0.3s; border: 1px solid #e1e4e8; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-color: #0056b3; }
+        .card h2 { color: #0056b3; margin: 0 0 10px 0; }
+        
+        .badge { background-color: #008234; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .footer-link { margin-top: 20px; text-align: right; }
+        
+        /* Footer */
+        .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    
+    <div class="header-container">
+        <h1 class="title-text">Hotel</h1>
+        <div sec:authorize="isAuthenticated()">
+            <p>Benvenuto, gestore!</p>
+        </div>
+        <div>
+             <a th:href="@{/login}">Login &rarr;</a>
+        </div>
+    </div>
+
+    <div id="camere-section">
+        <h2>Le nostre Camere</h2>
+        <div class="grid-container">
+            <div th:each="camera : ${camere}"
+                class="card"
+                th:onclick="|window.location.href='@{/camere/{id}(id=${camera.id})}'|">
+
+                <h2 th:text="${camera.tipo}">Nome Camera</h2>
+                <div class="badge" th:text="${camera.tipo}">Standard</div>
+                <p>Prezzo: <span th:text="${camera.prezzo}">1000€</span></p>
+            </div>
+        </div>
+
+        <div class="footer-link">
+            <a th:href="@{/camere}">Vedi tutte le camere &rarr;</a>
+        </div>
+    </div>
+
+    <hr style="margin: 40px 0;">
+
+<!--  <div id="offerte-section">
+        <h2>Offerte Speciali</h2>
+        <div class="grid-container">
+            <div th:each="evento : ${eventi}" class="card">
+                <h2 th:text="${evento.nome}">Nome Evento</h2>
+                <p th:text="${evento.descrizione}">Descrizione evento...</p>
+            </div>
+        </div>
+    </div> -->
+
+</div>
+
+<div class="page-footer">
+    <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
+</div>
+
+</body>
+</html>
