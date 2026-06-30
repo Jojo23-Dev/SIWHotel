@@ -2,6 +2,7 @@ package it.uniroma3.siw.siw_hotel.service;
 
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.siw_hotel.model.Utente;
@@ -15,7 +16,7 @@ public class UtenteService {
 	public UtenteService(UtenteRepository utenteRepository) {
 		this.utenteRepository = utenteRepository;
 	}
-
+	
 	public Optional<Utente> getUtente(Long id) {
 		return this.utenteRepository.findById(id);
 	}
@@ -27,5 +28,10 @@ public class UtenteService {
 	public Utente salvaUtente(Utente utente){
 		return this.utenteRepository.save(utente);
 	}
+
+	// Il nuovo metodo che cerca direttamente tramite lo username
+    public Utente getUtenteByUsername(String username) {
+        return utenteRepository.findByCredenzialiUsername(username);
+    }
 
 }
