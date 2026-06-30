@@ -14,14 +14,22 @@ import it.uniroma3.siw.siw_hotel.model.Utente;
 @Controller
 public class UtenteController {
 
-    @Autowired
-    private GlobalController globalController;
+    // @Autowired
+    // private GlobalController globalController;
+
+    // @GetMapping("/area-personale")
+    // public String apriAreaPersonale(Model model) {
+    //     // UserDetails utenteCorrente =  this.globalController.getUtente();
+    //     UserDetails utenteCorrente = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //     model.addAttribute("utente", utenteCorrente);
+    // return "area_personale";
+    // }
 
     @GetMapping("/area-personale")
-    public String apriAreaPersonale(Model model) {
-        // UserDetails utenteCorrente =  this.globalController.getUtente();
-        Utente utenteCorrente = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("utente", utenteCorrente);
-    return "area_personale.html";
+    public String apriAreaPersonale() {
+        // Non devi fare assolutamente nulla qui!
+        // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
+        
+        return "area_personale";
     }
 }

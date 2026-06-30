@@ -60,7 +60,7 @@ public class SecurityConfiguration {
 
         httpSecurity.logout(logout -> {
             logout.logoutUrl("/logout");
-            logout.logoutSuccessUrl("/");
+            logout.logoutSuccessUrl("/home");
             logout.invalidateHttpSession(true);
             logout.deleteCookies("JSESSIONID");
             logout.clearAuthentication(true);

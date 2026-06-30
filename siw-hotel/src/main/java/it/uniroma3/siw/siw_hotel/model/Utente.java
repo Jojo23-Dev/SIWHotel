@@ -1,5 +1,6 @@
 package it.uniroma3.siw.siw_hotel.model;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -17,14 +18,14 @@ import jakarta.persistence.OneToOne;
 public class Utente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 80, nullable=false)
     private String nome,cognome;
 
     @Column(nullable=false)
-    private Date dataDiNascita;
+    private LocalDate dataDiNascita;
 
     @Column(nullable=false)
     private String nazione;
@@ -44,6 +45,24 @@ public class Utente {
 
 
 
+    public LocalDate getDataDiNascita() {
+        return dataDiNascita;
+    }
+    public void setDataDiNascita(LocalDate dataDiNascita) {
+        this.dataDiNascita = dataDiNascita;
+    }
+    public String getNazione() {
+        return nazione;
+    }
+    public void setNazione(String nazione) {
+        this.nazione = nazione;
+    }
+    public String getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
     public Long getId() {
         return id;
     }
