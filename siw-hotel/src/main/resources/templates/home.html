@@ -30,13 +30,29 @@
 <div class="page-container">
     
     <div class="header-container">
-        <h1 class="title-text">Hotel</h1>
-        <div sec:authorize="isAuthenticated()">
-            <p>Benvenuto, gestore!</p>
-        </div>
-        <div>
-             <a th:href="@{/login}">Login &rarr;</a>
-        </div>
+ 
+        <!-- CASO 1: Utente NON autenticato -->
+    <div sec:authorize="!isAuthenticated()">
+        <p>Benvenuto</p>
+        <a th:href="@{/login}">Login &rarr;</a>
+    </div>
+
+    <!-- CASO 2: Utente autenticato -->
+    <div sec:authorize="isAuthenticated()">
+        
+        <!-- Sotto-caso: ADMIN -->
+        <p sec:authorize="hasAuthority('ADMIN_ROLE')">
+            Benvenuto gestore, <span sec:authentication="utente.username"></span>
+        </p>
+
+        <!-- Sotto-caso: Utente standard (DEFAULT_ROLE) -->
+        <!-- Assumendo che il principal abbia accesso all'entità Utente collegata -->
+        <p sec:authorize="!hasAuthority('ADMIN')">
+            Benvenuto <span sec:authentication="principal.utente.nome"></span>
+        </p>
+        
+        <a th:href="@{/logout}">Logout</a>
+    </div>
     </div>
 
     <div id="camere-section">
