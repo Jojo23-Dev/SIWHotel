@@ -1,5 +1,10 @@
 package it.uniroma3.siw.siw_hotel.model;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +13,7 @@ import jakarta.persistence.Id;
 
 @Entity
 // in caso agggiungi @NamedQuery
-public class Credenziali {
+public class Credenziali implements UserDetails {
 
     public static final String DEFAULT_ROLE = "DEFAULT";
     public static final String ADMIN_ROLE = "ADMIN";
@@ -73,6 +78,11 @@ public class Credenziali {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
     }
 
     

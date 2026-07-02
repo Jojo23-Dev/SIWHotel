@@ -1,3 +1,4 @@
 insert into credenziali (username, password, ruolo) values('paolo', '$2a$10$yWAIDyuEr78BBBFZ5cYh8.Nw4gUHFTRG5FwaWqNCGeOD8M4mh3.xy', 'ADMIN_ROLE');
 insert into credenziali (username, password, ruolo) values('Michele', '$2a$10$yWAIDyuEr78BBBFZ5cYh8.Nw4gUHFTRG5FwaWqNCGeOD8M4mh3.xy', 'DEFAULT_ROLE');
+insert into utente (credenziali_id,data_di_nascita, email, telefono, cognome, nome, nazione) values (1,'2000-01-01', 'admin1@siwhotel.it', '+39 333 1234567', '1', 'Admin', 'Italia');
 insert into utente (credenziali_id,data_di_nascita, email, telefono, cognome, nome, nazione) values (2,'1963-02-17', 'michaeljordan@bulls.com', '+39 333 1234567', 'Giordano', 'Michele', 'Italia');

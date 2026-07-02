@@ -42,16 +42,19 @@
         
         <!-- Sotto-caso: ADMIN -->
         <p sec:authorize="hasAuthority('ADMIN_ROLE')">
-            Benvenuto gestore, <span sec:authentication="utente.username"></span>
+            Benvenuto gestore, <span sec:authentication="principal.username">utente</span>
         </p>
 
         <!-- Sotto-caso: Utente standard (DEFAULT_ROLE) -->
         <!-- Assumendo che il principal abbia accesso all'entità Utente collegata -->
-        <p sec:authorize="!hasAuthority('ADMIN')">
-            Benvenuto <span sec:authentication="principal.utente.nome"></span>
+        <p sec:authorize="!hasAuthority('ADMIN_ROLE')">
+            Benvenuto <span sec:authentication="principal.username">utente</span>
         </p>
         
-        <a th:href="@{/logout}">Logout</a>
+        <a th:href="@{/area-personale}">Area personale</a>
+        <form th:action="@{/logout}" method="POST" style="margin: 0;">
+            <button type="submit" class="btn-outline btn-danger">Logout</button>
+        </form>
     </div>
     </div>
 
