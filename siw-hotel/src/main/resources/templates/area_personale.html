@@ -243,12 +243,12 @@
                         <tr th:each="prenotazione : ${prenotazioni}">
                             <td th:text="${prenotazione.id}">#1001</td>
                             <td th:text="${prenotazione.camera.tipo}">Doppia Standard</td>
-                            <td th:text="${#temporals.format(prenotazione.dataInizio, 'dd/MM/yyyy')}">10/08/2026</td>
-                            <td th:text="${#temporals.format(prenotazione.dataFine, 'dd/MM/yyyy')}">15/08/2026</td>
+                            <td th:text="${#temporals.format(prenotazione.dataCheckIn, 'dd/MM/yyyy')}">10/08/2026</td>
+                            <td th:text="${#temporals.format(prenotazione.dataCheckOut, 'dd/MM/yyyy')}">15/08/2026</td>
                             <td>
                                 <span class="status-badge" 
                                       th:classappend="${'status-' + prenotazione.stato.name().toLowerCase()}" 
-                                      th:text="${prenotazione.stato}">
+                                      th:text="${prenotazione?.stato}">
                                       CONFERMATA
                                 </span>
                             </td>

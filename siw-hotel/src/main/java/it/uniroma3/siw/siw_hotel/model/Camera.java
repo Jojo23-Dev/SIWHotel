@@ -36,7 +36,7 @@ public class Camera {
     private Long persone;
     
     @OneToMany(mappedBy = "camera")
-    private Collection<CameraPrenotata> prenotazioni;
+    private Collection<Prenotazione> prenotazioni;
 
 
 

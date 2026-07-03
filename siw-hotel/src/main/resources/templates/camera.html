@@ -61,13 +61,72 @@
         <p th:text="${camera.descrizione}">Qui verrà visualizzata la descrizione completa della camera inserita nel database.</p>
     </div>
 
-    <div style="margin-top: 40px; text-align: center;">
-        <a th:href="@{/camere/{id}/prenota(id=${camera.id})}" class="btn-prenota">Prenota ora questa camera</a>
+    <!-- <div style="margin-top: 40px; background: #e6f0fa; padding: 25px; border-radius: 10px; border: 1px solid #b3d4f5;">
+        <h3 style="margin-top: 0; color: #002244; text-align: center;">Verifica Disponibilità e Prenota</h3>
+        
+        <div th:if="${errore}" style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; border: 1px solid #f5c6cb;" th:text="${errore}"></div>
+
+        <form th:action="@{/camere/{id}/verifica-disponibilita(id=${camera.id})}" th:object="${disponibilitaDto}" method="POST" style="display: flex; justify-content: center; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+            
+            <div>
+                <label th:for="dataCheckIn" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Data Check-in</label>
+                <input type="date" th:field="*{dataCheckIn}" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"/>
+            </div>
+            
+            <div>
+                <label th:for="dataCheckOut" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Data Check-out</label>
+                <input type="date" th:field="*{dataCheckOut}" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"/>
+            </div>
+
+            <button type="submit" class="btn-prenota" style="border: none; cursor: pointer;">Verifica &rarr;</button>
+        </form>
+    </div> -->
+
+    <div style="margin-top: 40px; background: #e6f0fa; padding: 25px; border-radius: 10px; border: 1px solid #b3d4f5;">
+        <h3 style="margin-top: 0; color: #002244; text-align: center;">Verifica Disponibilità e Prenota</h3>
+        
+        <div th:if="${errore}" style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; margin-bottom: 20px; text-align: center; border: 1px solid #f5c6cb; font-weight: bold;" th:text="${errore}"></div>
+
+        <div th:if="${messaggioSuccesso}" style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 5px; margin-bottom: 20px; text-align: center; border: 1px solid #c3e6cb; font-weight: bold;" th:text="${messaggioSuccesso}"></div>
+
+        <form th:action="@{/camere/{id}/verifica-disponibilita(id=${camera.id})}" th:object="${disponibilitaDto}" method="POST" style="display: flex; justify-content: center; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+            
+            <div>
+                <label th:for="checkIn" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Data Check-in</label>
+                <input type="date" th:field="*{checkIn}" th:value="${checkInConfermato != null ? checkInConfermato : ''}" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"/>
+            </div>
+            
+            <div>
+                <label th:for="checkOut" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Data Check-out</label>
+                <input type="date" th:field="*{checkOut}" th:value="${checkOutConfermato != null ? checkOutConfermato : ''}" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"/>
+            </div>
+
+            <button type="submit" class="btn-prenota" style="background-color: #0056b3; border: none; cursor: pointer;">Verifica Date</button>
+        </form>
+
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px 0;">
+
+        <div th:if="${messaggioSuccesso == null}" style="text-align: center;">
+            <button class="btn-prenota" disabled style="opacity: 0.5; cursor: not-allowed;">Prenota ora questa camera</button>
+            <p style="font-size: 13px; color: #666; margin-top: 10px;">Verifica la disponibilità delle date per sbloccare la prenotazione.</p>
+        </div>
+
+        <div th:if="${messaggioSuccesso}" style="text-align: center;">
+            <form th:action="@{/camere/{id}/prenota(id=${camera.id})}" method="GET">
+                <input type="hidden" name="checkIn" th:value="${checkInConfermato}">
+                <input type="hidden" name="checkOut" th:value="${checkOutConfermato}">
+                
+                <button type="submit" class="btn-prenota" style="border: none; cursor: pointer; font-size: 18px; padding: 15px 40px; box-shadow: 0 4px 6px rgba(0,130,52,0.3);">
+                    Prenota ora questa camera
+                </button>
+            </form>
+        </div>
+
     </div>
 </div>
 
 <div class="page-footer">
-     <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
+    <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
 
 </div>
 

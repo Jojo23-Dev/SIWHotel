@@ -2,7 +2,6 @@ package it.uniroma3.siw.siw_hotel.model;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,8 +40,7 @@ public class Utente {
     private Credenziali credenziali;
 
     @OneToMany(mappedBy = "cliente")
-    private Collection<CameraPrenotata> prenotazioni;
-
+    private Collection<Prenotazione> prenotazioni;
 
 
     public LocalDate getDataDiNascita() {
@@ -92,6 +90,9 @@ public class Utente {
     }
     public void setCredenziali(Credenziali credenziali) {
         this.credenziali = credenziali;
+    }
+    public Collection<Prenotazione> getPrenotazioni() {
+        return prenotazioni;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.siw_hotel.model.Camera;
+import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.repository.CameraRepository;
 
 @Service
@@ -25,5 +26,6 @@ public class CameraService {
 		return this.cameraRepository.findAll();
 	}
 
+	
 
 }

@@ -1,5 +1,6 @@
 package it.uniroma3.siw.siw_hotel.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -12,17 +13,17 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 // in caso agggiungi @NamedQuery
-public class CameraPrenotata {
+public class Prenotazione {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idPrenotazione;
 
     @Column(nullable=false)
-    private Date dataCheckIn;
+    private LocalDate dataCheckIn;
 
     @Column(nullable=false)
-    private Date dataCheckOut;
+    private LocalDate dataCheckOut;
 
     @Column(length = 2000)
     private String note;
@@ -46,19 +47,19 @@ public class CameraPrenotata {
         this.idPrenotazione = idPrenotazione;
     }
 
-    public Date getDataCheckIn() {
+    public LocalDate getDataCheckIn() {
         return dataCheckIn;
     }
 
-    public void setDataCheckIn(Date dataCheckIn) {
+    public void setDataCheckIn(LocalDate dataCheckIn) {
         this.dataCheckIn = dataCheckIn;
     }
 
-    public Date getDataCheckOut() {
+    public LocalDate getDataCheckOut() {
         return dataCheckOut;
     }
 
-    public void setDataCheckOut(Date dataCheckOut) {
+    public void setDataCheckOut(LocalDate dataCheckOut) {
         this.dataCheckOut = dataCheckOut;
     }
 
@@ -94,7 +95,7 @@ public class CameraPrenotata {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        CameraPrenotata other = (CameraPrenotata) obj;
+        Prenotazione other = (Prenotazione) obj;
         if (idPrenotazione == null) {
             if (other.idPrenotazione != null)
                 return false;
