@@ -179,7 +179,7 @@
         <div class="top-cards-row">
             
             <div class="section-card">
-                <h3>I Miei Dati <a th:href="@{/profilo/modifica}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">Modifica</a></h3>
+                <h3>I Miei Dati <a th:href="@{/profilo/dettaglio}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">Dettaglio</a></h3>
                 <ul class="data-list">
                     <li>
                         <span class="data-label">Nome e Cognome:</span>
@@ -189,14 +189,14 @@
                         <span class="data-label">Email:</span>
                         <span class="data-value" th:text="${utente.email}">mario.rossi@email.com</span>
                     </li>
-                    <li>
+                    <!-- <li>
                         <span class="data-label">Telefono:</span>
                         <span class="data-value" th:text="${utente.telefono}">+39 3331234567</span>
                     </li>
                     <li>
                         <span class="data-label">Data di Nascita:</span>
                         <span class="data-value" th:text="${#temporals.format(utente.dataDiNascita, 'dd/MM/yyyy')}">01/01/1990</span>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 
@@ -223,7 +223,7 @@
         <div class="section-card">
             <h3>Le Mie Prenotazioni</h3>
             
-            <p th:if="${#lists.isEmpty(prenotazioni)}" style="color: #777; font-style: italic;">
+            <p th:if="${#lists.isEmpty(utente.prenotazioni)}" style="color: #777; font-style: italic;">
                 Non hai ancora effettuato prenotazioni. <a th:href="@{/camere}">Cerca una camera!</a>
             </p>
 
@@ -235,26 +235,49 @@
                             <th>Camera</th>
                             <th>Check-in</th>
                             <th>Check-out</th>
-                            <th>Stato</th>
-                            <th>Dettagli</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="prenotazione : ${prenotazioni}">
-                            <td th:text="${prenotazione.id}">#1001</td>
+                        <tr th:each="prenotazione : ${utente.prenotazioni}">
+                            <td th:text="${prenotazione.idPrenotazione}">#1001</td>
                             <td th:text="${prenotazione.camera.tipo}">Doppia Standard</td>
                             <td th:text="${#temporals.format(prenotazione.dataCheckIn, 'dd/MM/yyyy')}">10/08/2026</td>
                             <td th:text="${#temporals.format(prenotazione.dataCheckOut, 'dd/MM/yyyy')}">15/08/2026</td>
                             <td>
-                                <span class="status-badge" 
-                                      th:classappend="${'status-' + prenotazione.stato.name().toLowerCase()}" 
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    
+                                    <a th:href="@{/area-personale/prenotazioni/{id}(id=${prenotazione.idPrenotazione})}" class="btn-action btn-primary">Dettagli</a>   
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                     
+                                    <form th:action="@{/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
+                                          method="POST" 
+                                          style="margin: 0;" 
+                                          onsubmit="return confirm('Sei assolutamente sicuro di voler cancellare questa prenotazione? Questa azione non può essere annullata.');">
+                                        
+                                        <button type="submit" class="btn-action btn-danger" style="background-color: #dc3545; color: white; border: none; cursor: pointer; padding: 6px 12px; border-radius: 5px;">
+                                            Cancella
+                                        </button>
+                                        
+                                    </form>
+                                    
+                                </div>
+                            </td>
+                            
+                            <!-- <td>
+                                <span class="status-badge"
+                                      th:classappend="${'status-' + prenotazione?.stato.name().toLowerCase()}"
                                       th:text="${prenotazione?.stato}">
                                       CONFERMATA
                                 </span>
-                            </td>
-                            <td>
+                            </td> -->
+                            <!-- <td>
                                 <a th:href="@{/prenotazioni/{id}(id=${prenotazione.id})}" class="btn-action btn-primary">Vedi Ricevuta</a>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

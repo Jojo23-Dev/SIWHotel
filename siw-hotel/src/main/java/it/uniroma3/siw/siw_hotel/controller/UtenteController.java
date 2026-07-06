@@ -8,7 +8,11 @@ import org.springframework.ui.Model;
 // import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.*;
+
+import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
+import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 
 
 @Controller
@@ -24,12 +28,25 @@ public class UtenteController {
     //     model.addAttribute("utente", utenteCorrente);
     // return "area_personale";
     // }
+    @Autowired
+    private PrenotazioneService prenotazioneService;
+
+    @Autowired
+    private GlobalController globalController;
 
     @GetMapping("/area-personale")
-    public String apriAreaPersonale() {
+    public String apriAreaPersonale(Model model) {
         // Non devi fare assolutamente nulla qui!
         // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
+        Utente utenteCorrente = this.globalController.getUtente();
+        model.addAttribute("utente", utenteCorrente);
+
+        // 2. IL FIX: Passiamo la lista delle prenotazioni al Model!
+        List<Prenotazione> miePrenotazioni = this.prenotazioneService.getPrenotazioni(utenteCorrente);
         
+        if(!miePrenotazioni.isEmpty() || miePrenotazioni!=null){
+            model.addAttribute("prenotazioni", miePrenotazioni);
+        }
         return "area_personale";
     }
 }

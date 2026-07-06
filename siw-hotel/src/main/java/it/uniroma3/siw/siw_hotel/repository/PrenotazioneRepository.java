@@ -1,12 +1,14 @@
 package it.uniroma3.siw.siw_hotel.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
+import it.uniroma3.siw.siw_hotel.model.Utente;
 
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long> {
 
@@ -17,4 +19,7 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long>
         @Param("dataCheckIn") LocalDate dataCheckIn,
         @Param("dataCheckOut") LocalDate dataCheckOut
     );
-}
+
+    public List<Prenotazione> findByCliente(Utente utente);
+    
+	}

@@ -2,9 +2,10 @@ package it.uniroma3.siw.siw_hotel.service;
 
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
 import it.uniroma3.siw.siw_hotel.repository.UtenteRepository;
 
@@ -15,6 +16,7 @@ public class UtenteService {
 
 	public UtenteService(UtenteRepository utenteRepository) {
 		this.utenteRepository = utenteRepository;
+		
 	}
 	
 	public Optional<Utente> getUtente(Long id) {

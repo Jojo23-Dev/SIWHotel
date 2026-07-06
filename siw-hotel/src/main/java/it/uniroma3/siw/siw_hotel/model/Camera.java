@@ -38,8 +38,22 @@ public class Camera {
     @OneToMany(mappedBy = "camera")
     private Collection<Prenotazione> prenotazioni;
 
-
-
+    
+    public Collection<Prenotazione> getPrenotazioni() {
+        return prenotazioni;
+    }
+    public void aggiungiPrenotazione(Prenotazione prenotazione) {
+        // Aggiunge la prenotazione alla lista di questo utente
+        if (this.prenotazioni != null) {
+            this.prenotazioni.add(prenotazione);
+        }
+    }
+     public void rimuoviPrenotazione(Prenotazione prenotazione) {
+        // Aggiunge la prenotazione alla lista di questo utente
+        if (this.prenotazioni != null) {
+            this.prenotazioni.remove(prenotazione);
+        }
+    }
     public Long getId() {
         return id;
     }

@@ -12,6 +12,7 @@ import it.uniroma3.siw.siw_hotel.repository.CameraRepository;
 public class CameraService {
 
     private CameraRepository cameraRepository;
+	private Camera camera;
 
 	public CameraService(CameraRepository cameraRepository) {
 		this.cameraRepository = cameraRepository;

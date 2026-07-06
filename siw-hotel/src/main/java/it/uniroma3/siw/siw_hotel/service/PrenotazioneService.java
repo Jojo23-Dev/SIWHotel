@@ -1,9 +1,13 @@
 package it.uniroma3.siw.siw_hotel.service;
 
+import it.uniroma3.siw.siw_hotel.model.Credenziali;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
+import it.uniroma3.siw.siw_hotel.model.Utente;
 import it.uniroma3.siw.siw_hotel.repository.PrenotazioneRepository;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,4 +28,14 @@ public class PrenotazioneService {
         return this.prenotazioneRepository.save(prenotazione);
     }
 
+    public Optional<Prenotazione> getPrenotazione(Long id){
+        return this.prenotazioneRepository.findById(id);
+    }
+    public List<Prenotazione> getPrenotazioni(Utente utente){
+        return this.prenotazioneRepository.findByCliente(utente);
+    }
+
+    public void cancellaPrenotazione(Prenotazione prenotazione) {
+        this.prenotazioneRepository.delete(prenotazione);
+    }
 }

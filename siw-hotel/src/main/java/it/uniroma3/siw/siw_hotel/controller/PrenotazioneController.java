@@ -1,5 +1,6 @@
 package it.uniroma3.siw.siw_hotel.controller;
 
+import it.uniroma3.siw.siw_hotel.service.UtenteService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.siw_hotel.dto.DisponibilitaDto;
 import it.uniroma3.siw.siw_hotel.model.Camera;
@@ -25,6 +27,8 @@ import jakarta.transaction.Transactional;
 
 @Controller
 public class PrenotazioneController {
+    @Autowired
+    private UtenteService utenteService;
 
     @Autowired
     private GlobalController globalController;
@@ -35,7 +39,7 @@ public class PrenotazioneController {
     @Autowired
     private CameraService cameraService;
 
-    PrenotazioneController(GlobalController globalController) {
+    public PrenotazioneController(GlobalController globalController) {
         this.globalController = globalController;
     }
 
@@ -85,11 +89,14 @@ public class PrenotazioneController {
         // 1. CREIAMO LA PRENOTAZIONE
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setCliente(utenteCorrente);
+        utenteCorrente.aggiungiPrenotazione(prenotazione);
+
         prenotazione.setDataCheckIn(dto.getCheckIn());
         prenotazione.setDataCheckOut(dto.getCheckOut());
         
         Camera cameraCorrente = this.cameraService.getCamera(cameraId).get();
         prenotazione.setCamera(cameraCorrente);
+        cameraCorrente.aggiungiPrenotazione(prenotazione);
         //manca prenotazione.note
 
         // Salviamo la prenotazione nel DB, si genererà l'ID
@@ -98,4 +105,38 @@ public class PrenotazioneController {
         return "redirect:/area-personale?success";
     }
 
+    @PostMapping("/area-personale/prenotazioni/{id}/cancella-prenotazione")
+    @Transactional
+    public String cancellaPrenotazione(
+       @PathVariable("id") Long id, // 1. Prendi l'ID dall'URL
+        RedirectAttributes redirectAttributes) {
+
+        Utente utenteCorrente = this.globalController.getUtente();
+
+        // 2. Vai a pescare la VERA prenotazione piena di dati dal database
+        Optional<Prenotazione> prenotazioneOpt = this.prenotazioneService.getPrenotazione(id);
+
+        if (prenotazioneOpt.isPresent()) {
+            Prenotazione prenotazione = prenotazioneOpt.get();
+
+            // 3. Controllo di sicurezza: è davvero la sua prenotazione?
+            if (prenotazione.getCliente().getId().equals(utenteCorrente.getId())) {
+                
+                // 4. Sganciamo i legami (usando i tuoi metodi)
+                prenotazione.getCliente().rimuoviPrenotazione(prenotazione);
+                prenotazione.getCamera().rimuoviPrenotazione(prenotazione);
+                
+                // 5. Cancelliamo definitivamente
+                this.prenotazioneService.cancellaPrenotazione(prenotazione);
+
+                redirectAttributes.addFlashAttribute("messaggioSuccesso", "Prenotazione cancellata con successo.");
+            } else {
+                redirectAttributes.addFlashAttribute("errore", "Non sei autorizzato a cancellare questa prenotazione.");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errore", "Prenotazione non trovata.");
+        }
+
+        return "redirect:/area-personale?success";
+    }
 }

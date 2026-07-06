@@ -61,7 +61,7 @@ public class CameraController {
         // TODO: Se è disponibile bottone Verde, altrimenti bottone Rosso
 
             @PathVariable("id") Long cameraId, 
-            @ModelAttribute("disponibilitaDto") DisponibilitaDto dto, 
+            @ModelAttribute("disponibilitaDto") DisponibilitaDto dto,
             RedirectAttributes redirectAttributes) {
 
         // Controllo validità date base (es. check-out non può essere prima di check-in)
@@ -71,7 +71,7 @@ public class CameraController {
         }
 
         // Controllo sovrapposizioni sul database
-        int sovrapposizioni = this.prenotazioneService.contaSovrapposizioni(dto.getCameraId(), dto.getCheckIn(), dto.getCheckOut());
+        int sovrapposizioni = this.prenotazioneService.contaSovrapposizioni(cameraId, dto.getCheckIn(), dto.getCheckOut());
 
         if (sovrapposizioni > 0) {
             // Camera OCCUPATA: torniamo indietro con un errore
