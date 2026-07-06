@@ -1,6 +1,6 @@
 package it.uniroma3.siw.siw_hotel.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,17 +12,17 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 // in caso agggiungi @NamedQuery
-public class Prenotazione {
+public class CameraPrenotata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idPrenotazione;
 
     @Column(nullable=false)
-    private LocalDate dataCheckIn;
+    private Date dataCheckIn;
 
     @Column(nullable=false)
-    private LocalDate dataCheckOut;
+    private Date dataCheckOut;
 
     @Column(length = 2000)
     private String note;
@@ -46,19 +46,19 @@ public class Prenotazione {
         this.idPrenotazione = idPrenotazione;
     }
 
-    public LocalDate getDataCheckIn() {
+    public Date getDataCheckIn() {
         return dataCheckIn;
     }
 
-    public void setDataCheckIn(LocalDate dataCheckIn) {
+    public void setDataCheckIn(Date dataCheckIn) {
         this.dataCheckIn = dataCheckIn;
     }
 
-    public LocalDate getDataCheckOut() {
+    public Date getDataCheckOut() {
         return dataCheckOut;
     }
 
-    public void setDataCheckOut(LocalDate dataCheckOut) {
+    public void setDataCheckOut(Date dataCheckOut) {
         this.dataCheckOut = dataCheckOut;
     }
 
@@ -78,14 +78,6 @@ public class Prenotazione {
         this.cliente = cliente;
     }
 
-    public Camera getCamera() {
-        return camera;
-    }
-
-    public void setCamera(Camera camera) {
-        this.camera = camera;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -102,7 +94,7 @@ public class Prenotazione {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Prenotazione other = (Prenotazione) obj;
+        CameraPrenotata other = (CameraPrenotata) obj;
         if (idPrenotazione == null) {
             if (other.idPrenotazione != null)
                 return false;
@@ -110,5 +102,4 @@ public class Prenotazione {
             return false;
         return true;
     }
-
 }

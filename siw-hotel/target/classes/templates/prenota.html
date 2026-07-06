@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Riepilogo Prenotazione</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .page-container { max-width: 800px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1; }
+        
+        .header-detail { border-bottom: 2px solid #0056b3; margin-bottom: 30px; padding-bottom: 10px; }
+        .header-detail h1 { color: #002244; margin: 0; font-size: 32px; }
+        
+        /* --- BOX RIEPILOGO --- */
+        .riepilogo-box { background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; font-size: 18px; line-height: 1.8; }
+        .totale-box { background: #d4edda; color: #155724; padding: 20px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 30px; border: 1px solid #c3e6cb; }
+        
+        /* --- FORM PAGAMENTO --- */
+        .payment-section { margin-bottom: 30px; }
+        .payment-section h3 { color: #002244; margin-bottom: 15px; }
+        
+        .radio-opzione { display: flex; align-items: center; gap: 15px; background: white; padding: 15px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; cursor: pointer; transition: 0.2s; font-size: 18px; }
+        .radio-opzione:hover { border-color: #0056b3; background: #e6f0fa; }
+        .radio-opzione input[type="radio"] { transform: scale(1.5); cursor: pointer; }
+        
+        /* --- SEZIONE CARTE (Nascosta di default) --- */
+        #sezione-carte { display: none; background: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: -5px; margin-bottom: 20px; }
+        #sezione-carte select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; margin-bottom: 15px; }
+        .link-nuova-carta { display: inline-block; color: #856404; font-weight: bold; text-decoration: none; font-size: 14px; }
+        .link-nuova-carta:hover { text-decoration: underline; }
+
+        .btn-conferma { background-color: #008234; color: white; padding: 16px; border-radius: 8px; text-decoration: none; font-weight: bold; display: block; width: 100%; text-align: center; border: none; font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-conferma:hover { background-color: #006629; }
+        
+        .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <div class="header-detail">
+        <h1>Conferma Prenotazione</h1>
+        <div>
+            <a th:href="@{/camere/{id}(id=${camera.id})}">&larr; Annulla prenotazione</a>
+        </div>
+    </div>
+
+    <div class="riepilogo-box">
+        <div><strong>Stai prenotando la camera:</strong> <span th:text="${camera.tipo}">Standard</span></div>
+        <div><strong>Dal giorno:</strong> <span th:text="${checkIn}">2026-08-10</span></div>
+        <div><strong>Al giorno:</strong> <span th:text="${checkOut}">2026-08-15</span></div>
+        <div><strong>Totale notti:</strong> <span th:text="${notti}">5</span></div>
+    </div>
+
+    <div class="totale-box">
+        Costo Totale: <span th:text="${prezzoTotale}">250.00</span> €
+    </div>
+
+    <form th:action="@{/camere/{id}/prenota/conferma-prenotazione(id=${camera.id})}" method="POST" id="formPrenotazione">
+        
+        <input type="hidden" name="checkIn" th:value="${checkIn}">
+        <input type="hidden" name="checkOut" th:value="${checkOut}">
+
+        <div class="payment-section">
+            <h3>Come preferisci pagare?</h3>
+            
+            <label class="radio-opzione" onclick="mostraCarte(false)">
+                <input type="radio" name="modalitaPagamento" value="RECEPTION" required checked>
+                <span>Paga alla Reception (All'arrivo)</span>
+            </label>
+
+            <label class="radio-opzione" onclick="mostraCarte(true)">
+                <input type="radio" name="modalitaPagamento" value="ONLINE">
+                <span>Paga Online ora (Carta di Credito)</span>
+            </label>
+
+            <div id="sezione-carte">
+                <label for="cartaSelezionata"><strong>Seleziona la tua carta:</strong></label>
+                
+                <select name="cartaId?" id="cartaSelezionata?" th:if="${!carteUtente?.isEmpty()}">
+                    <option th:each="carta : ${carteUtente?}" 
+                            th:value="${carta?.id}" 
+                            th:text="${carta?.circuito + ' terminante in ****' + carta?.ultimeCifre + ' (Intestata a: ' + carta?.intestatario + ')'}">
+                        Visa terminante in ****1234
+                    </option>
+                </select>
+
+                <div th:if="${carteUtente.isEmpty()}" style="color: #d9534f; font-weight: bold; margin-bottom: 10px;">
+                    Nessuna carta salvata nel tuo profilo.
+                </div>
+
+                <a href="/area-personale/carte/nuova" target="_blank" class="link-nuova-carta">+ Aggiungi una nuova carta</a>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-conferma">Conferma Definitivamente</button>
+    </form>
+</div>
+
+<div class="page-footer">
+    <p>&copy; 2026 Siw Hotel - Tutti i diritti riservati.</p>
+</div>
+
+<script>
+    function mostraCarte(mostra) {
+        var sezioneCarte = document.getElementById("sezione-carte");
+        var selectCarta = document.getElementById("cartaSelezionata");
+        
+        if (mostra) {
+            sezioneCarte.style.display = "block";
+            if(selectCarta) selectCarta.setAttribute("required", "required"); // Rende la carta obbligatoria se sceglie Online
+        } else {
+            sezioneCarte.style.display = "none";
+            if(selectCarta) selectCarta.removeAttribute("required"); // Togle l'obbligo se sceglie Reception
+        }
+    }
+</script>
+
+</body>
+</html>

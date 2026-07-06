@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.siw.siw_hotel.dto.DisponibilitaDto;
-import it.uniroma3.siw.siw_hotel.dto.RegistrazioneDto;
 import it.uniroma3.siw.siw_hotel.model.Camera;
-import it.uniroma3.siw.siw_hotel.model.Credenziali;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
 import it.uniroma3.siw.siw_hotel.service.CameraService;
@@ -78,7 +76,9 @@ public class PrenotazioneController {
 
     @PostMapping("/camere/{id}/prenota/conferma-prenotazione")
     @Transactional
-    public String confermaPrenotazione(@ModelAttribute("disponibilitaDto") DisponibilitaDto dto) {
+    public String confermaPrenotazione(
+        @PathVariable("id") Long cameraId, // <-- Cattura l'ID dall'URL
+        @ModelAttribute("disponibilitaDto") DisponibilitaDto dto) {
         
         Utente utenteCorrente = this.globalController.getUtente();
 
@@ -87,12 +87,12 @@ public class PrenotazioneController {
         prenotazione.setCliente(utenteCorrente);
         prenotazione.setDataCheckIn(dto.getCheckIn());
         prenotazione.setDataCheckOut(dto.getCheckOut());
+        
+        Camera cameraCorrente = this.cameraService.getCamera(cameraId).get();
+        prenotazione.setCamera(cameraCorrente);
         //manca prenotazione.note
 
-        // 2
-        
-
-        // Salviamo le credenziali nel DB per generare il loro ID
+        // Salviamo la prenotazione nel DB, si genererà l'ID
         this.prenotazioneService.savePrenotazione(prenotazione);
 
         return "redirect:/area-personale?success";
