@@ -176,14 +176,22 @@
 
         <h1 class="page-title">Area Personale, <span th:text="${utente.nome}">Ospite</span>!</h1>
 
+        <div th:if="${messaggioSuccesso}" style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; border: 1px solid #c3e6cb; margin-bottom: 25px;" th:text="${messaggioSuccesso}"></div>
+
+        <div th:if="${errore}" style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; border: 1px solid #f5c6cb; margin-bottom: 25px;" th:text="${errore}"></div>
+
         <div class="top-cards-row">
             
             <div class="section-card">
-                <h3>I Miei Dati <a th:href="@{/profilo/dettaglio}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">Dettaglio</a></h3>
+                <h3>Profilo <a th:href="@{/area-personale/profilo}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">Dettagli</a></h3>
                 <ul class="data-list">
                     <li>
                         <span class="data-label">Nome e Cognome:</span>
                         <span class="data-value" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</span>
+                    </li>
+                    <li>
+                        <span class="data-label">Username:</span>
+                        <span class="data-value" th:text="${credenziali.username}">mariorossi</span>
                     </li>
                     <li>
                         <span class="data-label">Email:</span>
@@ -201,7 +209,7 @@
             </div>
 
             <div class="section-card">
-                <h3>Metodi di Pagamento <a th:href="@{/pagamenti/nuovo}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">+ Aggiungi</a></h3>
+                <h3>Metodi di Pagamento <a th:href="@{/area-personale/pagamenti/nuovo}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">+ Aggiungi</a></h3>
                 
                 <p th:if="${#lists.isEmpty(metodiPagamento)}" style="color: #777; font-style: italic;">
                     Nessun metodo di pagamento salvato.
@@ -221,9 +229,9 @@
         </div>
 
         <div class="section-card">
-            <h3>Le Mie Prenotazioni</h3>
+            <h3>Le Mie Prenotazioni</h3><a th:href="@{/area-personale/prenotazioni}" class="btn-outline" style="font-size: 12px; padding: 5px 10px;">Vedi tutto</a></h3>
             
-            <p th:if="${#lists.isEmpty(utente.prenotazioni)}" style="color: #777; font-style: italic;">
+            <p th:if="${#lists.isEmpty(utente.prenotazioni)}" style="color: #777777; font-style: italic;">
                 Non hai ancora effettuato prenotazioni. <a th:href="@{/camere}">Cerca una camera!</a>
             </p>
 
@@ -241,7 +249,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="prenotazione : ${utente.prenotazioni}">
-                            <td th:text="${prenotazione.idPrenotazione}">#1001</td>
+                            <td th:text="${'#' + prenotazione.idPrenotazione}">#1001</td>
                             <td th:text="${prenotazione.camera.tipo}">Doppia Standard</td>
                             <td th:text="${#temporals.format(prenotazione.dataCheckIn, 'dd/MM/yyyy')}">10/08/2026</td>
                             <td th:text="${#temporals.format(prenotazione.dataCheckOut, 'dd/MM/yyyy')}">15/08/2026</td>
@@ -254,16 +262,21 @@
                             <td>
                                 <div style="display: flex; gap: 10px; align-items: center;">
                                      
-                                    <form th:action="@{/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
-                                          method="POST" 
-                                          style="margin: 0;" 
-                                          onsubmit="return confirm('Sei assolutamente sicuro di voler cancellare questa prenotazione? Questa azione non può essere annullata.');">
+                                    <form th:if="${prenotazione.cancellabile}" 
+                                        th:action="@{/area-personale/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
+                                        method="POST" 
+                                        style="margin: 0;" 
+                                        onsubmit="return confirm('Sei assolutamente sicuro di voler cancellare questa prenotazione? Questa azione non può essere annullata.');">
                                         
                                         <button type="submit" class="btn-action btn-danger" style="background-color: #dc3545; color: white; border: none; cursor: pointer; padding: 6px 12px; border-radius: 5px;">
                                             Cancella
                                         </button>
-                                        
                                     </form>
+
+                                    <div th:unless="${prenotazione.cancellabile}" 
+                                        style="padding: 6px 12px; font-size: 13px; color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 5px; text-align: center;">
+                                        Non cancellabile
+                                    </div>
                                     
                                 </div>
                             </td>

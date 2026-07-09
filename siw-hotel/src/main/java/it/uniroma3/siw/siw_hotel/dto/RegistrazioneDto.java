@@ -2,10 +2,13 @@ package it.uniroma3.siw.siw_hotel.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class RegistrazioneDto {
     // Campi dell'Utente
     private String nome;
     private String cognome;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataDiNascita;
     private String nazione;
     private String email;
@@ -16,9 +19,16 @@ public class RegistrazioneDto {
     // Campi delle Credenziali
     private String username;
     private String password;
+    private String confermaPassword;
 
 
 
+    public String getConfermaPassword() {
+        return confermaPassword;
+    }
+    public void setConfermaPassword(String confermaPassword) {
+        this.confermaPassword = confermaPassword;
+    }
     public String getNome() {
         return nome;
     }

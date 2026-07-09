@@ -7,9 +7,16 @@ public class DisponibilitaDto {
     private Long cameraId;
     private LocalDate dataCheckIn;
     private LocalDate dataCheckOut;
+    private double prezzoTotale;
 
     // Genera qui i costruttori, Getter e Setter!
 
+    public double getPrezzoTotale() {
+        return prezzoTotale;
+    }
+    public void setPrezzoTotale(double prezzoTotale) {
+        this.prezzoTotale = prezzoTotale;
+    }
     public Long getCameraId() {
         return this.cameraId;
     }

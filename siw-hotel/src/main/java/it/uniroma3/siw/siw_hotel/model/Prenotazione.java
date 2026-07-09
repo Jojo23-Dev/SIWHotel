@@ -1,6 +1,7 @@
 package it.uniroma3.siw.siw_hotel.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +27,29 @@ public class Prenotazione {
 
     @Column(length = 2000)
     private String note;
+
+    @Column(nullable=false)
+    private double prezzoTotale;
     
+
+    public boolean isCancellabile() {
+        if (this.dataCheckIn == null) {
+            return false;
+        }
+        // Calcola i giorni di differenza tra OGGI e la data del Check-in
+        long giorniMancanti = ChronoUnit.DAYS.between(LocalDate.now(), this.dataCheckIn);
+    
+        // Ritorna true solo se mancano 3 o più giorni
+        return giorniMancanti >= 3;
+    }
+
+    public double getPrezzoTotale() {
+        return prezzoTotale;
+    }
+
+    public void setPrezzoTotale(double prezzoTotale) {
+        this.prezzoTotale = prezzoTotale;
+    }
 
     @ManyToOne
     @JoinColumn(nullable=false)

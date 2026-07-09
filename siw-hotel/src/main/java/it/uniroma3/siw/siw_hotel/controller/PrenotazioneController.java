@@ -43,11 +43,25 @@ public class PrenotazioneController {
         this.globalController = globalController;
     }
 
+    @GetMapping("/area-personale/prenotazioni/{id}")
+    public String apriDettagliPrenotazione(@PathVariable("id") Long prenotazioneId, Model model) {
+        
+        Optional<Prenotazione> prenotazioneOptional = this.prenotazioneService.getPrenotazione(prenotazioneId);
+        if (prenotazioneOptional.isEmpty()) {
+            return "redirect:/prenotazioni";
+        }
+        Prenotazione prenotazione = prenotazioneOptional.get();
+        model.addAttribute("prenotazione", prenotazione);
+
+        return "prenotazione";
+    }
+
     @GetMapping("/camere/{id}/prenota")
     public String prenotaCamera(@PathVariable("id") Long cameraId,
             Model model,
             @RequestParam("checkIn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
-            @RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut) {
+            @RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
+            DisponibilitaDto dto) {
 
         // 1. Sicurezza: se mancano le date, rimandiamo alla pagina della camera
         if (checkIn == null || checkOut == null) {
@@ -64,6 +78,7 @@ public class PrenotazioneController {
         // 3. Calcoli logici del prezzo
         Long notti = ChronoUnit.DAYS.between(checkIn, checkOut);
         double prezzoTotale = notti * camera.getPrezzo();
+        dto.setPrezzoTotale(prezzoTotale);
 
         // 4. Passiamo tutto a Thymeleaf
         model.addAttribute("camera", camera);
@@ -93,50 +108,61 @@ public class PrenotazioneController {
 
         prenotazione.setDataCheckIn(dto.getCheckIn());
         prenotazione.setDataCheckOut(dto.getCheckOut());
+
         
         Camera cameraCorrente = this.cameraService.getCamera(cameraId).get();
         prenotazione.setCamera(cameraCorrente);
         cameraCorrente.aggiungiPrenotazione(prenotazione);
         //manca prenotazione.note
 
+        // 3. Calcoli logici del prezzo
+        Long notti = ChronoUnit.DAYS.between(dto.getCheckIn(), dto.getCheckOut());
+        double prezzoTotale = notti * cameraCorrente.getPrezzo();
+        prenotazione.setPrezzoTotale(prezzoTotale);
+
         // Salviamo la prenotazione nel DB, si genererà l'ID
         this.prenotazioneService.savePrenotazione(prenotazione);
 
-        return "redirect:/area-personale?success";
+        return "redirect:/area-personale/prenotazioni?success";
     }
 
     @PostMapping("/area-personale/prenotazioni/{id}/cancella-prenotazione")
     @Transactional
     public String cancellaPrenotazione(
-       @PathVariable("id") Long id, // 1. Prendi l'ID dall'URL
+       @PathVariable("id") Long id, // Prendi l'ID dall'URL
         RedirectAttributes redirectAttributes) {
 
         Utente utenteCorrente = this.globalController.getUtente();
 
-        // 2. Vai a pescare la VERA prenotazione piena di dati dal database
+        // prova a prendere la prenotazione dal database
         Optional<Prenotazione> prenotazioneOpt = this.prenotazioneService.getPrenotazione(id);
 
+        // se opt è pieno continua
         if (prenotazioneOpt.isPresent()) {
             Prenotazione prenotazione = prenotazioneOpt.get();
 
-            // 3. Controllo di sicurezza: è davvero la sua prenotazione?
+            // controllo di sicurezza: è davvero la sua prenotazione?
             if (prenotazione.getCliente().getId().equals(utenteCorrente.getId())) {
                 
-                // 4. Sganciamo i legami (usando i tuoi metodi)
-                prenotazione.getCliente().rimuoviPrenotazione(prenotazione);
-                prenotazione.getCamera().rimuoviPrenotazione(prenotazione);
+                if (prenotazione.isCancellabile()) {
+                    // sganciamo i collegamenti
+                    prenotazione.getCliente().rimuoviPrenotazione(prenotazione);
+                    prenotazione.getCamera().rimuoviPrenotazione(prenotazione);
                 
-                // 5. Cancelliamo definitivamente
-                this.prenotazioneService.cancellaPrenotazione(prenotazione);
+                    // annulliamo le Foreign Key
+                    prenotazione.setCliente(null);
+                    prenotazione.setCamera(null);
 
-                redirectAttributes.addFlashAttribute("messaggioSuccesso", "Prenotazione cancellata con successo.");
+                    this.prenotazioneService.cancellaPrenotazione(prenotazione);
+
+                    redirectAttributes.addFlashAttribute("messaggioSuccesso", "Prenotazione cancellata con successo.");
+                } else {
+                    redirectAttributes.addFlashAttribute("errore", "Impossibile cancellare: mancano meno di 3 giorni al check-in.");
+                }
             } else {
-                redirectAttributes.addFlashAttribute("errore", "Non sei autorizzato a cancellare questa prenotazione.");
+                    redirectAttributes.addFlashAttribute("errore", "Prenotazione non trovata nel sistema.");
             }
-        } else {
-            redirectAttributes.addFlashAttribute("errore", "Prenotazione non trovata.");
         }
-
-        return "redirect:/area-personale?success";
+        return "redirect:/area-personale/prenotazioni?success=cancellata";
     }
 }

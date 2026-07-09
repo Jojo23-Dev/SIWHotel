@@ -43,8 +43,17 @@ public class AuthController {
 
     @PostMapping("/registrazione")
     @Transactional
-    public String registraUtente(@ModelAttribute("registrazioneDto") RegistrazioneDto dto) {
+    public String registraUtente(@ModelAttribute("registrazioneDto") RegistrazioneDto dto, Model model) {
         
+        // 0. CONTROLLO CONFERMA PASSWORD
+        if (!dto.getPassword().equals(dto.getConfermaPassword())) {
+            // Passiamo l'errore specifico alla vista
+            model.addAttribute("errorePassword", "Le password inserite non coincidono. Riprova.");
+            // ATTENZIONE: Ritorniamo la vista direttamente (niente "redirect:"), 
+            // così l'oggetto "dto" rimane popolato e l'utente non perde i dati inseriti!
+            return "registrazione"; 
+        }
+
         // 1. CREIAMO LE CREDENZIALI
         Credenziali credenziali = new Credenziali();
         credenziali.setUsername(dto.getUsername());

@@ -40,6 +40,7 @@ public class UtenteController {
         // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
         Utente utenteCorrente = this.globalController.getUtente();
         model.addAttribute("utente", utenteCorrente);
+        model.addAttribute("credenziali", utenteCorrente.getCredenziali());
 
         // 2. IL FIX: Passiamo la lista delle prenotazioni al Model!
         List<Prenotazione> miePrenotazioni = this.prenotazioneService.getPrenotazioni(utenteCorrente);
@@ -48,5 +49,30 @@ public class UtenteController {
             model.addAttribute("prenotazioni", miePrenotazioni);
         }
         return "area_personale";
+    }
+
+    @GetMapping("/area-personale/profilo")
+    public String apriDettagliProfilo(Model model) {
+        // Non devi fare assolutamente nulla qui!
+        // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
+        Utente utenteCorrente = this.globalController.getUtente();
+        model.addAttribute("utente", utenteCorrente);
+        model.addAttribute("credenziali", utenteCorrente.getCredenziali());
+
+        return "profilo";
+    }
+
+    @GetMapping("/area-personale/prenotazioni")
+    public String apriPrenotazioni(Model model) {
+        // Non devi fare assolutamente nulla qui!
+        // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
+        Utente utenteCorrente = this.globalController.getUtente();
+        // Passiamo la lista delle prenotazioni al Model
+        List<Prenotazione> miePrenotazioni = this.prenotazioneService.getPrenotazioni(utenteCorrente);
+        
+        if(!miePrenotazioni.isEmpty() || miePrenotazioni!=null){
+            model.addAttribute("prenotazioni", miePrenotazioni);
+        }
+        return "prenotazioni";
     }
 }
