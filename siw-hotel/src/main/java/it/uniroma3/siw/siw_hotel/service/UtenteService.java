@@ -30,10 +30,16 @@ public class UtenteService {
 	public Utente salvaUtente(Utente utente){
 		return this.utenteRepository.save(utente);
 	}
+	
 
 	// Il nuovo metodo che cerca direttamente tramite lo username
     public Utente getUtenteByUsername(String username) {
         return utenteRepository.findByCredenzialiUsername(username);
     }
+
+
+	public void eliminaUtente(Utente utente){
+		this.utenteRepository.delete(utente);
+	}
 
 }

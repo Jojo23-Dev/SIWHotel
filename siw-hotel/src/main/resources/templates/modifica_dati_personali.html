@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Grand Luxury - Modifica Profilo</title>
+    <style>
+        /* Struttura base con Footer appiccicoso */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .page-container {
+            max-width: 650px;
+            margin: 40px auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- PULSANTE DI NAVIGAZIONE --- */
+        .nav-buttons {
+            display: flex;
+            margin-bottom: 25px;
+        }
+
+        .btn-nav {
+            padding: 10px 18px;
+            text-decoration: none;
+            color: #0056b3;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #0056b3;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-nav:hover {
+            background-color: #e6f0fa;
+        }
+
+        /* --- CARD DELLA MODIFICA --- */
+        .profile-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e4e8;
+        }
+
+        .profile-card h2 {
+            margin: 0 0 10px 0;
+            color: #002244;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .profile-card p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        /* --- MESSAGGI DI ERRORE / SUCCESSO --- */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* --- FORM ELEMENTI --- */
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0056b3;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.2);
+        }
+
+        /* Stile specifico per affiancare prefisso e telefono */
+        .phone-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-container select {
+            width: 35%;
+        }
+
+        .phone-container input {
+            width: 65%;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #008234; /* Verde per indicare un salvataggio riuscito */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #006629;
+        }
+
+        /* --- FOOTER --- */
+        .page-footer {
+            background-color: #002244;
+            height: 80px;
+            width: 100%;
+            margin-top: auto;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <div class="nav-buttons">
+            <a class="btn-nav" th:href="@{/area-personale}">&larr; Torna all'Area Personale</a>
+        </div>
+
+        <div class="profile-card">
+            <h2>Modifica Dati Personali</h2>
+            <p class="subtitle">Aggiorna le tue informazioni di contatto e anagrafiche.</p>
+
+            <div th:if="${param.error}" class="error-message">
+                Si è verificato un errore durante l'aggiornamento. Controlla i dati inseriti.
+            </div>
+            
+            <div th:if="${param.success}" class="success-message">
+                Dati aggiornati con successo!
+            </div>
+
+            <form th:action="@{/profilo/modifica-dati-personali}" th:object="${modificaDto}" method="POST">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="nome">Nome</label>
+                        <input type="text" th:field="*{nome}" required placeholder="Es. Mario" autofocus/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label th:for="cognome">Cognome</label>
+                        <input type="text" th:field="*{cognome}" required placeholder="Es. Rossi"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="dataDiNascita">Data di Nascita</label>
+                        <input type="date" th:field="*{dataDiNascita}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="nazione">Nazione</label>
+                        <select th:field="*{nazione}" required>
+                            <option value="" disabled>Seleziona...</option>
+                            <option value="IT">Italia</option>
+                            <option value="FR">Francia</option>
+                            <option value="DE">Germania</option>
+                            <option value="ES">Spagna</option>
+                            <option value="UK">Regno Unito</option>
+                            <option value="US">Stati Uniti</option>
+                            <option value="OTHER">Altro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label th:for="email">Indirizzo Email</label>
+                        <input type="email" id="email" name="email" th:field="*{email}" required placeholder="es. mario.rossi@email.com"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="telefono">Telefono</label>
+                        <div class="phone-container">
+                            <select th:field="*{prefisso}" required>
+                                <option value="+39">+39 (IT)</option>
+                                <option value="+33">+33 (FR)</option>
+                                <option value="+49">+49 (DE)</option>
+                                <option value="+34">+34 (ES)</option>
+                                <option value="+44">+44 (UK)</option>
+                                <option value="+1">+1 (US)</option>
+                            </select>
+                            <input type="tel" th:field="*{telefono}" required placeholder="333 1234567"/>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Salva Modifiche</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="page-footer">
+        <p>&copy; 2026 Hotel Grand Luxury - Prenotazioni Online</p>
+    </div>
+
+</body>
+</html>

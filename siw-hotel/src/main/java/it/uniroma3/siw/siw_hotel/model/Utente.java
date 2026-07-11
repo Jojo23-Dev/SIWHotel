@@ -3,6 +3,7 @@ package it.uniroma3.siw.siw_hotel.model;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,11 +36,11 @@ public class Utente {
     @Column(length = 40, nullable=false, unique=true)
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable=false, unique=true)
     private Credenziali credenziali;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.REMOVE)
     private Collection<Prenotazione> prenotazioni;
 
 

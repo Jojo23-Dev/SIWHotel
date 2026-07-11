@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 // import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
 import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
+import jakarta.transaction.Transactional;
 
 
 @Controller
@@ -56,12 +59,16 @@ public class UtenteController {
         // Non devi fare assolutamente nulla qui!
         // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
         Utente utenteCorrente = this.globalController.getUtente();
+        
+        
+        
         model.addAttribute("utente", utenteCorrente);
         model.addAttribute("credenziali", utenteCorrente.getCredenziali());
 
         return "profilo";
     }
 
+   
     @GetMapping("/area-personale/prenotazioni")
     public String apriPrenotazioni(Model model) {
         // Non devi fare assolutamente nulla qui!
