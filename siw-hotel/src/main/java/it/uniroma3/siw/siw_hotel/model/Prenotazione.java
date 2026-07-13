@@ -3,6 +3,7 @@ package it.uniroma3.siw.siw_hotel.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 // in caso agggiungi @NamedQuery
@@ -30,6 +33,11 @@ public class Prenotazione {
 
     @Column(nullable=false)
     private double prezzoTotale;
+    
+    @OneToOne(mappedBy = "prenotazione", cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
+    private Recensione recensione;
+
     
 
     public boolean isCancellabile() {
@@ -60,7 +68,14 @@ public class Prenotazione {
     private Camera camera;
    
    
-   
+   public Recensione getRecensione() {
+        return recensione;
+    }
+
+    public void setRecensione(Recensione recensione) {
+        this.recensione = recensione;
+    }
+
     public Long getIdPrenotazione() {
         return idPrenotazione;
     }

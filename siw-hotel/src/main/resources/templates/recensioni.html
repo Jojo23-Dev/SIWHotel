@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Recensioni - Hotel Grand Luxury</title>
+    <style>
+        /* --- STILI BASE (Ereditati dal tuo progetto) --- */
+        body { margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; }
+        .page-container { max-width: 1200px; margin: 0 auto; flex: 1; width: 100%; padding: 40px 20px; box-sizing: border-box; }
+
+        /* --- HEADER E BOTTONI --- */
+        .top-nav { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-outline { padding: 8px 16px; text-decoration: none; color: #0056b3; background-color: #ffffff; border-radius: 8px; border: 1px solid #0056b3; font-weight: bold; transition: 0.2s; font-size: 14px; }
+        .btn-outline:hover { background-color: #e6f0fa; }
+        .page-title { color: #002244; margin-bottom: 30px; font-size: 32px; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+
+        /* --- GRIGLIA RECENSIONI --- */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; width: 100%; }
+        
+        .review-card { background-color: white; border: 1px solid #e1e4e8; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+        .empty-message { padding: 30px; background-color: white; border-radius: 12px; text-align: center; color: #666; font-size: 18px; border: 1px dashed #ccc; }
+
+        /* --- STILI SPECIFICI RECENSIONE --- */
+        .stars { color: #FFD700; font-size: 20px; margin-bottom: 10px; letter-spacing: 2px; }
+        .review-text { color: #444; font-size: 15px; line-height: 1.6; flex-grow: 1; font-style: italic; }
+        .review-author { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; display: flex; flex-direction: column; }
+        .author-name { font-weight: bold; color: #002244; font-size: 16px; }
+        .room-stay { color: #888; font-size: 13px; margin-top: 3px; }
+
+        /* --- FOOTER --- */
+        .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    
+    <div class="top-nav">
+        <a class="btn-outline" th:href="@{/}">&larr; Torna alla Home</a>
+        
+        <a sec:authorize="isAuthenticated()" class="btn-outline" th:href="@{/area-personale}" style="background-color: #0056b3; color: white;">Scrivi una recensione</a>
+    </div>
+
+    <h1 class="page-title">Cosa dicono i nostri Ospiti</h1>
+
+    <div th:if="${#lists.isEmpty(recensioni)}" class="empty-message">
+        <p>Non ci sono ancora recensioni. Diventa il primo a raccontare la tua esperienza!</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(recensioni)}" class="grid-container">
+        
+        <div th:each="recensione : ${recensioni}" class="review-card">
+            
+            <div class="stars">
+                <span th:each="i : ${#numbers.sequence(1, recensione.numeroStelle)}">&#9733;</span></div>
+            
+            <p class="review-text" th:text="${recensione.testo}">"Un'esperienza fantastica, il personale è stato gentilissimo e la camera era uno spettacolo!"</p>
+            
+            <div class="review-author">
+                <span class="author-name" th:text="${recensione.prenotazione.cliente.nome + ' ' + recensione.prenotazione.cliente.cognome}">Mario Rossi</span>
+                
+                <span class="room-stay" th:text="'Ha soggiornato in: ' + ${recensione.prenotazione.camera.tipo}">Ha soggiornato in: Suite Imperiale</span>
+            </div>
+            
+        </div>
+        </div>
+
+</div>
+
+<div class="page-footer">
+    <p>&copy; 2026 Hotel Grand Luxury. Tutti i diritti riservati.</p>
+</div>
+
+</body>
+</html>

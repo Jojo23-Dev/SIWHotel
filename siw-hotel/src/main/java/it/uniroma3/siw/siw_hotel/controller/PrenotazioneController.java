@@ -53,7 +53,7 @@ public class PrenotazioneController {
         Prenotazione prenotazione = prenotazioneOptional.get();
         model.addAttribute("prenotazione", prenotazione);
 
-        return "prenotazione";
+        return "camera/prenotazione";
     }
 
     @GetMapping("/camere/{id}/prenota")
@@ -90,7 +90,7 @@ public class PrenotazioneController {
         // 5. TRUCCO: Passiamo una lista vuota per non far crashare la tendina delle carte!
         model.addAttribute("carteUtente", List.of()); // Oppure Collections.emptyList()
 
-        return "prenota"; // Cerca prenota.html
+        return "camera/prenota"; // Cerca prenota.html
     }
 
     @PostMapping("/camere/{id}/prenota/conferma-prenotazione")

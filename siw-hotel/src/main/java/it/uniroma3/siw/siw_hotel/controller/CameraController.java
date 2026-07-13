@@ -41,7 +41,7 @@ public class CameraController {
             if (!model.containsAttribute("disponibilitaDto")) {
                 model.addAttribute("disponibilitaDto", new DisponibilitaDto());
             }
-            return "camera"; // nome del tuo file HTML
+            return "camera/cameraDettaglio"; // nome del tuo file HTML
         } else {
             // Gestisci il caso in cui l'id non esiste (es. redirect a errore o elenco)
             return "redirect:/camere";
@@ -52,7 +52,7 @@ public class CameraController {
     public String list(Model model) {
         Iterable<Camera> allCamere = this.cameraService.getCamere();
         model.addAttribute("camere", allCamere);
-    return "camere";
+    return "camera/camere";
     }
 
     // 2. NUOVO: Riceve le date e controlla il database

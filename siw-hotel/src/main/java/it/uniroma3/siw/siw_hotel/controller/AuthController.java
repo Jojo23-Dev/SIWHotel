@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import it.uniroma3.siw.siw_hotel.dto.ModificaDatiPersonaliDto;
 import it.uniroma3.siw.siw_hotel.dto.CambioPasswordDto;
@@ -43,14 +42,14 @@ public class AuthController {
 
     @GetMapping("/login")
     public String mostraLogin() {
-        return "login"; // Cerca il file templates/login.html
+        return "auth/login"; // Cerca il file templates/login.html
     }
     
     @GetMapping("/registrazione")
     public String mostraRegistrazione(Model model) {
         // Passa al form il dto (oggetto che trasporta dati) vuoto
         model.addAttribute("registrazioneDto", new RegistrazioneDto());
-        return "registrazione"; // Cerca templates/registrazione.html
+        return "auth/registrazione"; // Cerca templates/registrazione.html
     }
 
     @GetMapping("/area-personale/profilo/modifica-dati-personali")
@@ -58,30 +57,34 @@ public class AuthController {
         // Passa al form il dto (oggetto che trasporta dati) vuoto
       
         Utente utenteCorrente = this.globalController.getUtente();
-        Utente utenteDaModicare = this.utenteService.getUtente(utenteCorrente.getId()).get();
         
         ModificaDatiPersonaliDto modifica = new ModificaDatiPersonaliDto();
         
         
-        utenteDaModicare.setNome(modifica.getNome());
-        utenteDaModicare.setCognome(modifica.getCognome());
-        utenteDaModicare.setDataDiNascita(modifica.getDataDiNascita());
-        utenteDaModicare.setNazione(modifica.getNazione());
-        utenteDaModicare.setEmail(modifica.getEmail());
-        // Concatena il prefisso e il numero (magari con uno spazio in mezzo)
-        String telefonoCompleto = modifica.getPrefisso() + " " + modifica.getTelefono();
-        utenteDaModicare.setTelefono(telefonoCompleto);
+        modifica.setNome(utenteCorrente.getNome());
+        modifica.setCognome(utenteCorrente.getCognome());
+        modifica.setDataDiNascita(utenteCorrente.getDataDiNascita());
+        modifica.setNazione(utenteCorrente.getNazione());
+        modifica.setEmail(utenteCorrente.getEmail());
+        if(utenteCorrente.getTelefono().length()==15){
+            modifica.setTelefono(utenteCorrente.getTelefono().substring(4,utenteCorrente.getTelefono().length()));
+            modifica.setPrefisso(utenteCorrente.getTelefono().substring(0,3));
+        }
+        else{
+            modifica.setTelefono(utenteCorrente.getTelefono().substring(3,utenteCorrente.getTelefono().length()));
+            modifica.setPrefisso(utenteCorrente.getTelefono().substring(0,2));
         
+        }
         model.addAttribute("modificaDto",modifica);
         
-        return "modifica_dati_personali"; // Cerca templates/modifica_dati_personali.html
+        return "utente/modifica_dati_personali"; // Cerca templates/modifica_dati_personali.html
     }
 
      @GetMapping("/cambio-password")
     public String mostraModificaPassword(Model model) {
         // Passa al form il dto (oggetto che trasporta dati) vuoto
         model.addAttribute("cambioPasswordDto", new CambioPasswordDto());
-        return "cambio_password"; // Cerca templates/cambio-password.html
+        return "auth/cambio_password"; // Cerca templates/cambio-password.html
     }
 
 
@@ -96,7 +99,7 @@ public class AuthController {
             model.addAttribute("errorePassword", "Le password inserite non coincidono. Riprova.");
             // ATTENZIONE: Ritorniamo la vista direttamente (niente "redirect:"), 
             // così l'oggetto "dto" rimane popolato e l'utente non perde i dati inseriti!
-            return "registrazione"; 
+            return "auth/registrazione"; 
         }
 
         // 1. CREIAMO LE CREDENZIALI
@@ -163,7 +166,7 @@ public class AuthController {
             model.addAttribute("errorePassword", "Le password inserite non coincidono. Riprova.");
             // ATTENZIONE: Ritorniamo la vista direttamente (niente "redirect:"), 
             // così l'oggetto "dto" rimane popolato e l'utente non perde i dati inseriti!
-            return "cambio_password"; 
+            return "auth/cambio_password"; 
         }
 
         // CONTROLLO SE LA VECCHIA PASSWORD E' UGUALE A QUELLA NUOVA
@@ -171,7 +174,7 @@ public class AuthController {
              model.addAttribute("errorePassword", "La password attuale non è corretta.");
             // ATTENZIONE: Ritorniamo la vista direttamente (niente "redirect:"), 
             // così l'oggetto "dto" rimane popolato e l'utente non perde i dati inseriti!
-            return "cambio_password"; 
+            return "auth/cambio_password"; 
         }
 
         credenziali.setPassword(passwordEncoder.encode(dto.getPasswordNuova()));

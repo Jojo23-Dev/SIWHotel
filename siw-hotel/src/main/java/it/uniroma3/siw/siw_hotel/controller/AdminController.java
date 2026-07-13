@@ -24,11 +24,11 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    @GetMapping("/prenotazioni")
-    public String elencoPrenotazioni(Model model) {
-        model.addAttribute("prenotazioni", this.prenotazioneService.getPrenotazioniTutte()); 
-        return "admin/prenotazioni";
-    }
+    // @GetMapping("/prenotazioni")
+    // public String elencoPrenotazioni(Model model) {
+    //     model.addAttribute("prenotazioni", this.prenotazioneService.getPrenotazioniTutte()); 
+    //     return "admin/prenotazioni";
+    // }
 
     @GetMapping("/clienti")
     public String elencoClienti(Model model) {

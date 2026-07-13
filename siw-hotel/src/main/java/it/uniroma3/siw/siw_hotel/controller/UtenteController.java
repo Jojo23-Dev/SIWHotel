@@ -51,7 +51,7 @@ public class UtenteController {
         if(!miePrenotazioni.isEmpty() || miePrenotazioni!=null){
             model.addAttribute("prenotazioni", miePrenotazioni);
         }
-        return "area_personale";
+        return "utente/area_personale";
     }
 
     @GetMapping("/area-personale/profilo")
@@ -65,7 +65,7 @@ public class UtenteController {
         model.addAttribute("utente", utenteCorrente);
         model.addAttribute("credenziali", utenteCorrente.getCredenziali());
 
-        return "profilo";
+        return "utente/profilo";
     }
 
    
@@ -80,6 +80,6 @@ public class UtenteController {
         if(!miePrenotazioni.isEmpty() || miePrenotazioni!=null){
             model.addAttribute("prenotazioni", miePrenotazioni);
         }
-        return "prenotazioni";
+        return "camera/prenotazioni";
     }
 }

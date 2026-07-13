@@ -9,20 +9,52 @@
         .page-container { max-width: 1200px; margin: 0 auto; flex: 1; width: 100%; padding: 20px; box-sizing: border-box; }
 
         /* Header */
-        .header-container { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid #0056b3; }
-        .title-text { color: #002244; margin: 0; }
+       .header-container { display: flex !important; flex-direction: row !important; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid #0056b3; width: 100%; box-sizing: border-box; }
+        /* Rimuove i margini dei titoli che rompevano l'allineamento */
+        .header-container h2 {  font-size: 22px; color: #002244; display: flex; align-items: center; }
 
-        /* Griglia a card */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 30px; }
-        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; transition: 0.3s; border: 1px solid #e1e4e8; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-color: #0056b3; }
-        .card h2 { color: #0056b3; margin: 0 0 10px 0; }
-        
-        .badge { background-color: #008234; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
-        .footer-link { margin-top: 20px; text-align: right; }
+        /* Contenitore interno per allineare in orizzontale i bottoni di destra */
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
+        /* Stile per i link del menu (Login / Area Personale) */
+        .header-link { font-size: 16px; font-weight: bold; color: #0056b3; text-decoration: none; transition: 0.2s;}
+        .header-link:hover { text-decoration: underline; }
+
+        /* Stile pulito per il pulsante di logout in linea */
+        .btn-danger-header { background-color: #dc3545; color: white; border: none; padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .btn-danger-header:hover { background-color: #c82333; }
+
+
+
+        /* Il contenitore principale della sezione */
+        #camere-section { width: 100%; margin-top: 30px; margin-bottom: 30px; box-sizing: border-box; }
+
+        /* La riga in alto: allinea titolo e link orizzontalmente */
+        .camere-header { display: flex !important; flex-direction: row !important; justify-content: space-between;  align-items: center; width: 100%; }
+
+        /* Resettiamo il margine dell'H2 per non sfasare l'altezza */
+        .camere-header h2 { margin: 0; font-size: 24px; color: #002244; }
+
+        /* Il link "Vedi tutte le camere" elegante */
+        .head-link { font-size: 16px; font-weight: bold; color: #0056b3; text-decoration: none; transition: 0.2s; }
+        .head-link:hover { text-decoration: underline; color: #003b80; }
+
+        /* Messaggio di testo se non ci sono camere */
+        .empty-message { padding: 20px; background-color: #f8f9fa; border-radius: 8px; text-align: center; color: #666; }
+
+        /* La griglia sotto (impostata a 3 colonne responsive, cambia a piacimento) */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%; }
+
+        /* Stile base per rendere la card cliccabile e reattiva */
+        .card { background-color: white; border: 1px solid #e1e4e8; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
         /* Footer */
         .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+        
+       
+       
+
     </style>
 </head>
 <body>
@@ -30,38 +62,46 @@
 <div class="page-container">
     
     <div class="header-container">
- 
-        <!-- CASO 1: Utente NON autenticato -->
-    <div sec:authorize="!isAuthenticated()">
-        <p>Benvenuto</p>
-        <a th:href="@{/login}">Login &rarr;</a>
-    </div>
-
-    <!-- CASO 2: Utente autenticato -->
-    <div sec:authorize="isAuthenticated()">
         
-        <!-- Sotto-caso: ADMIN -->
-        <p sec:authorize="hasAuthority('ADMIN_ROLE')">
+    <th:block sec:authorize="!isAuthenticated()">
+        <h2>Benvenuto</h2>
+        <a th:href="@{/login}" class="header-link">Login &rarr;</a>
+    </th:block>
+
+    <th:block sec:authorize="isAuthenticated()">
+        
+        <h2 sec:authorize="hasAuthority('ADMIN_ROLE')">
             Benvenuto gestore, <span sec:authentication="principal.username">utente</span>
-        </p>
+        </h2>
 
-        <!-- Sotto-caso: Utente standard (DEFAULT_ROLE) -->
-        <!-- Assumendo che il principal abbia accesso all'entità Utente collegata -->
-        <p sec:authorize="!hasAuthority('ADMIN_ROLE')">
-            Benvenuto <span sec:authentication="principal.username">utente</span>
-        </p>
+        <h2 sec:authorize="!hasAuthority('ADMIN_ROLE')">
+            Benvenuto, <span sec:authentication="principal.username">utente</span>
+        </h2>
         
-        <a th:href="@{/area-personale}">Area personale</a>
-        <form th:action="@{/logout}" method="POST" style="margin: 0;">
-            <button type="submit" class="btn-outline btn-danger">Logout</button>
-        </form>
+        <div class="header-actions">
+            <a th:href="@{/area-personale}" class="header-link">Area personale</a>
+            
+            <form th:action="@{/logout}" method="POST" style="margin: 0; display: inline-block;">
+                <button type="submit" class="btn-danger-header">Logout</button>
+            </form>
+        </div>
+        
+    </th:block>
+        
     </div>
-    </div>
-
     <div id="camere-section">
-        <h2>Le nostre Camere</h2>
+        <div>
+            <h2>Le nostre Camere</h2>
+        </div>
+        <div class="head-link">
+            <a th:href="@{/camere}" id="link">Vedi tutte le camere --></a>
+        </div>
+        <!-- Caso in cui non ci sono camere disponibili -->
+         <div th:if="${camere.isEmpty()}">
+            <p>Non ci sono camere disponibili al momento.</p>
+        </div>
         <div class="grid-container">
-            <div th:each="camera : ${camere}"
+            <div th:each="camera: ${camere}"
                 class="card"
                 th:onclick="|window.location.href='@{/camere/{id}(id=${camera.id})}'|">
 
@@ -71,9 +111,7 @@
             </div>
         </div>
 
-        <div class="footer-link">
-            <a th:href="@{/camere}">Vedi tutte le camere &rarr;</a>
-        </div>
+        
     </div>
 
     <hr style="margin: 40px 0;">
@@ -87,6 +125,18 @@
             </div>
         </div>
     </div> -->
+
+    <div id="recensioni-section" class="page-section">
+        
+        <div class="section-header">
+            <h2>Le recensioni dei nostri ospiti</h2>
+            <a th:href="@{/recensioni}" class="head-link">Vedi tutte le recensioni &rarr;</a>
+        </div>
+        
+        <div class="grid-container">
+            </div>
+
+    </div>
 
 </div>
 

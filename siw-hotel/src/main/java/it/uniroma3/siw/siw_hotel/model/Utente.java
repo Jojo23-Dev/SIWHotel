@@ -43,7 +43,13 @@ public class Utente {
     @OneToMany(mappedBy = "cliente",cascade = CascadeType.REMOVE)
     private Collection<Prenotazione> prenotazioni;
 
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.REMOVE)
+    private Collection<Recensione> recensioni;
 
+    
+    public Collection<Recensione> getRecensioni() {
+        return recensioni;
+    }
     public LocalDate getDataDiNascita() {
         return dataDiNascita;
     }
