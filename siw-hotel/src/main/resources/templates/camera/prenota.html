@@ -52,7 +52,7 @@
     </div>
 
     <div class="totale-box">
-        Costo Totale: <span th:text="${prezzoTotale}">250.00</span> €
+        Costo Totale: <span th:text="${prezzoTotale + '€'}">250.00</span> 
     </div>
 
     <form th:action="@{/camere/{id}/prenota/conferma-prenotazione(id=${camera.id})}" method="POST" id="formPrenotazione">

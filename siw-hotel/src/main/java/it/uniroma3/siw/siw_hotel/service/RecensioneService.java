@@ -38,7 +38,7 @@ public class RecensioneService {
         this.recensioneRepository.deleteById(id);
     }
     
-    public Recensione saveCredenziali(Recensione recensione){
+    public Recensione saveRecensione(Recensione recensione){
         return this.recensioneRepository.save(recensione);
     }
 

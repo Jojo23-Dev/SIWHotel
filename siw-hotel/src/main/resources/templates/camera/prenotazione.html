@@ -259,13 +259,13 @@
             </div>
 
             <div class="totale-box">
-                <!-- <span th:if="${prenotazione.stato?.name() == 'EFFETTUATA_NON_PAGATA'}">Importo da Saldare:</span>
-                <span th:if="${prenotazione.stato?.name() != 'EFFETTUATA_NON_PAGATA'}">Importo Totale Pagato:</span> -->
+                 <span th:if="${prenotazione.stato?.getNomeVisualizzato() == 'Da Pagare'}">Importo da Saldare:</span>
+                <span th:if="${prenotazione.stato?.getNomeVisualizzato() != 'Da Pagare'}">Importo Totale Pagato:</span> 
                 <span class="importo" th:text="${#numbers.formatDecimal(prenotazione.prezzoTotale, 1, 'COMMA', 2, 'POINT')} + ' €'">150.00 €</span>
             </div>
 
             <div class="action-area">
-                <div th:if="${prenotazione.cancellabile}">
+                <div th:if="${prenotazione.stato?.cancellabile}">
                     <form th:action="@{/area-personale/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
                         method="POST" 
                         onsubmit="return confirm('Sei assolutamente sicuro di voler cancellare questa prenotazione? Questa azione non può essere annullata.');">
@@ -273,7 +273,7 @@
                     </form>
                 </div>
 
-                <div th:unless="${prenotazione.cancellabile}">
+                <div th:unless="${prenotazione.stato?.cancellabile}">
                     <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; text-align: center;">
                         <strong>Cancellazione non più disponibile.</strong><br>
                         Mancano meno di 3 giorni al check-in. Contatta la reception per urgenze.

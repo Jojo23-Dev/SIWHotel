@@ -266,8 +266,10 @@
                             <th>Camera</th>
                             <th>Check-in</th>
                             <th>Check-out</th>
-                            <th>Stato</th>  <th>Azioni</th>
-                            <th>Recensione</th> </tr>
+                            <th>Stato</th>  
+                            <th>Azioni</th>
+                            <th>Recensione</th> 
+                        </tr>
                         </tr>
                     </thead>
                     <tbody>
@@ -277,21 +279,20 @@
                             <td th:text="${#temporals.format(prenotazione.dataCheckIn, 'dd/MM/yyyy')}">10/08/2026</td>
                             <td th:text="${#temporals.format(prenotazione.dataCheckOut, 'dd/MM/yyyy')}">15/08/2026</td>
                             
-                            <!-- <td>
-                                <span th:if="${prenotazione.stato?.name() == 'EFFETTUATA_NON_PAGATA'}" class="status-badge status-non-pagata">Da Pagare</span>
-                                <span th:if="${prenotazione.stato?.name() == 'EFFETTUATA_PAGATA'}" class="status-badge status-pagata">Pagata</span>
-                                <span th:if="${prenotazione.stato?.name() == 'TERMINATA'}" class="status-badge status-terminata">Terminata</span>
-                            </td> -->
                             <td>
-                                <div style="display: flex; gap: 10px; align-items: center;">
+                                <span th:if="${prenotazione.stato?.getNomeVisualizzato() == 'Da Pagare'}" class="status-badge status-non-pagata">Da Pagare</span>
+                                <span th:if="${prenotazione.stato?.getNomeVisualizzato() == 'Pagata'}" class="status-badge status-pagata">Pagata</span>
+                                <span th:if="${prenotazione.stato?.getNomeVisualizzato() == 'Terminata'}" class="status-badge status-terminata">Terminata</span>
+                            </td>
+                            
+                            <td>
+                                  <div style="display: flex; gap: 10px; align-items: center;">
                                     
                                     <a th:href="@{/area-personale/prenotazioni/{id}(id=${prenotazione.idPrenotazione})}" class="btn-action btn-primary">Dettagli</a>   
                                 </div>
-                            </td>
-                            <td>
                                 <div style="display: flex; gap: 10px; align-items: center;">
                                      
-                                    <form th:if="${prenotazione.cancellabile}" 
+                                    <form th:if="${prenotazione.stato?.cancellabile}" 
                                         th:action="@{/area-personale/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
                                         method="POST" 
                                         style="margin: 0;" 
@@ -302,7 +303,7 @@
                                         </button>
                                     </form>
 
-                                    <div th:unless="${prenotazione.cancellabile}" 
+                                    <div th:unless="${prenotazione.stato?.cancellabile}" 
                                         style="padding: 6px 12px; font-size: 13px; color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 5px; text-align: center;">
                                         Non cancellabile
                                     </div>
@@ -310,7 +311,7 @@
                                 </div>
                             </td>
                             <td>
-                                <a th:if="${prenotazione.stato?.name() == 'TERMINATA' and prenotazione.recensione == null}" 
+                                <a th:if="${prenotazione.stato?.getNomeVisualizzato() == 'Terminata' and prenotazione.recensione == null}" 
                                    th:href="@{/area-personale/prenotazioni/{id}/recensisci(id=${prenotazione.idPrenotazione})}" 
                                    class="btn-action btn-review">
                                    Lascia Recensione

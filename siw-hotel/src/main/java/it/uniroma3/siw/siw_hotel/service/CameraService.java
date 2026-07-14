@@ -1,7 +1,11 @@
 package it.uniroma3.siw.siw_hotel.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.siw_hotel.model.Camera;
@@ -13,6 +17,10 @@ public class CameraService {
 
     private CameraRepository cameraRepository;
 	private Camera camera;
+
+
+	@Autowired
+	private PrenotazioneService prenotazioneService;
 
 	public CameraService(CameraRepository cameraRepository) {
 		this.cameraRepository = cameraRepository;
@@ -27,6 +35,31 @@ public class CameraService {
 		return this.cameraRepository.findAll();
 	}
 
+	// TODO da vedere
+    // public List<Camera> getCamereDisponibili(LocalDate checkIn, LocalDate checkOut) {
+    //     // TODO Auto-generated method stub
+	// 	Iterable<Camera> allCamere = this.cameraRepository.findAll();
+
+	// 	List<Camera> allCamereDisponibili = new ArrayList<>();
+
+	// 	if(checkIn == null || checkOut ==null){
+	// 		allCamereDisponibili.addAll((List<Camera>)allCamere) ;
+	// 		return allCamereDisponibili;
+	// 	}
+
+
+	// 	for(Camera c : allCamere){
+	// 		 int sovrapposizioni = this.prenotazioneService.contaSovrapposizioni(c.getId(), checkIn, checkOut);
+
+	// 		if(sovrapposizioni == 0){
+	// 			allCamereDisponibili.add(c);
+	// 		}
+			
+	// 	}
+	// 	return allCamereDisponibili;
+	// }
+
+	
 	
 
 }

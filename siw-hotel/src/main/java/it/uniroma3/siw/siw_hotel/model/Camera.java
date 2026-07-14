@@ -49,7 +49,7 @@ public class Camera {
         }
     }
      public void rimuoviPrenotazione(Prenotazione prenotazione) {
-        // Aggiunge la prenotazione alla lista di questo utente
+        // Rimuove la prenotazione alla lista di questo utente
         if (this.prenotazioni != null) {
             this.prenotazioni.remove(prenotazione);
         }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lascia una Recensione - Hotel Grand Luxury</title>
+    <style>
+        /* --- STILE BASE --- */
+        body { margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; }
+        .page-container { max-width: 600px; margin: 40px auto; flex: 1; width: 100%; padding: 20px; box-sizing: border-box; }
+        
+        /* --- NAVIGAZIONE --- */
+        .top-nav { display: flex; justify-content: flex-start; margin-bottom: 30px; }
+        .btn-outline { padding: 10px 18px; text-decoration: none; color: #0056b3; background-color: #ffffff; border-radius: 8px; border: 1px solid #0056b3; font-weight: bold; transition: 0.2s; }
+        .btn-outline:hover { background-color: #e6f0fa; }
+
+        /* --- CARD FORM --- */
+        .section-card { background-color: #ffffff; border-radius: 12px; padding: 35px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); border: 1px solid #e1e4e8; text-align: center; }
+        .section-card h2 { color: #002244; margin-top: 0; font-size: 24px; margin-bottom: 5px;}
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 30px; }
+
+        /* --- SISTEMA A STELLE (TRUCCO CSS) --- */
+        .rating-container { display: flex; justify-content: center; margin-bottom: 25px; }
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse; /* Inverte l'ordine per far funzionare l'hover sulle stelle precedenti */
+            font-size: 40px;
+            gap: 5px;
+        }
+        .star-rating input { display: none; /* Nascondiamo i pallini veri dei radio button */ }
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        /* Quando passi sopra una stella, colora d'oro lei e tutte quelle che la seguono (che per via del row-reverse sono a sinistra!) */
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffc107;
+        }
+
+        /* --- TESTO RECENSIONE --- */
+        .form-group { text-align: left; margin-bottom: 30px; }
+        .form-group label { display: block; font-weight: bold; color: #002244; margin-bottom: 8px; }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-family: inherit;
+            resize: vertical;
+        }
+        textarea:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 5px rgba(0,86,179,0.3); }
+
+        /* --- BOTTONE INVIA --- */
+        .btn-submit {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .btn-submit:hover { background-color: #003b80; }
+
+        /* --- FOOTER --- */
+        .page-footer { background-color: #002244; height: 80px; width: 100%; margin-top: auto; color: white; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <div class="top-nav">
+            <a class="btn-outline" th:href="@{/area-personale/prenotazioni/{id}(id=${prenotazione.idPrenotazione})}">&larr; Annulla e torna alla prenotazione</a>
+        </div>
+
+        <div class="section-card">
+            <h2>Valuta il tuo soggiorno</h2>
+            <p class="subtitle" th:text="'Prenotazione #' + ${prenotazione.idPrenotazione} + ' - ' + ${prenotazione.camera.tipo}"></p>
+
+            <form th:action="@{/area-personale/prenotazioni/{idPrenotazione}/recensisci(idPrenotazione=${prenotazione.idPrenotazione})}" 
+                  th:object="${recensione}" 
+                  method="POST">
+                
+                <div class="rating-container">
+                    <div class="star-rating">
+                        
+                        <input type="radio" id="star5" name="numeroStelle" value="5" 
+                            th:checked="${recensione.numeroStelle == 5}" required />
+                        <label for="star5" title="5 stelle">&#9733;</label>
+                        
+                        <input type="radio" id="star4" name="numeroStelle" value="4" 
+                            th:checked="${recensione.numeroStelle == 4}" />
+                        <label for="star4" title="4 stelle">&#9733;</label>
+                        
+                        <input type="radio" id="star3" name="numeroStelle" value="3" 
+                            th:checked="${recensione.numeroStelle == 3}" />
+                        <label for="star3" title="3 stelle">&#9733;</label>
+                        
+                        <input type="radio" id="star2" name="numeroStelle" value="2" 
+                            th:checked="${recensione.numeroStelle == 2}" />
+                        <label for="star2" title="2 stelle">&#9733;</label>
+                        
+                        <input type="radio" id="star1" name="numeroStelle" value="1" 
+                            th:checked="${recensione.numeroStelle == 1}" />
+                        <label for="star1" title="1 stella">&#9733;</label>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="testo">Racconta la tua esperienza (opzionale):</label>
+                    <textarea id="testo" th:field="*{testo}" placeholder="La camera era pulita? Lo staff è stato gentile?"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Pubblica Recensione</button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div class="page-footer">
+        <p>&copy; 2026 Hotel Grand Luxury - Prenotazioni Online</p>
+    </div>
+
+</body>
+</html>

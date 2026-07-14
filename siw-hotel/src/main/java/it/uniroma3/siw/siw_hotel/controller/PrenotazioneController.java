@@ -144,7 +144,7 @@ public class PrenotazioneController {
             // controllo di sicurezza: è davvero la sua prenotazione?
             if (prenotazione.getCliente().getId().equals(utenteCorrente.getId())) {
                 
-                if (prenotazione.isCancellabile()) {
+                if (prenotazione.getStato().isCancellabile()) {
                     // sganciamo i collegamenti
                     prenotazione.getCliente().rimuoviPrenotazione(prenotazione);
                     prenotazione.getCamera().rimuoviPrenotazione(prenotazione);

@@ -26,7 +26,7 @@ public class Recensione {
 
     private LocalDateTime dataEOra;
 
-    
+    @Column(name = "numero_stelle", nullable = false)
     private int numeroStelle;
 
     @OneToOne

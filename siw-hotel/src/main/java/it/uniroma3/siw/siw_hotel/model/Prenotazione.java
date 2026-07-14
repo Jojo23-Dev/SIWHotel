@@ -3,6 +3,8 @@ package it.uniroma3.siw.siw_hotel.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
+import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazioneNonPagata;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,17 +40,29 @@ public class Prenotazione {
     @JoinColumn(nullable = true)
     private Recensione recensione;
 
-    
+    @OneToOne( cascade = CascadeType.ALL)
+    private StatoPrenotazione stato;
 
-    public boolean isCancellabile() {
-        if (this.dataCheckIn == null) {
-            return false;
-        }
-        // Calcola i giorni di differenza tra OGGI e la data del Check-in
-        long giorniMancanti = ChronoUnit.DAYS.between(LocalDate.now(), this.dataCheckIn);
     
-        // Ritorna true solo se mancano 3 o più giorni
-        return giorniMancanti >= 3;
+    public Prenotazione() {
+        this.stato = new StatoPrenotazioneNonPagata(this);//default
+    }
+
+
+    public void paga() {
+        this.stato.confermaPagamento(this); // Passa se stessa allo stato
+    }
+
+    public void termina() {
+        this.stato.terminaSoggiorno(this);
+    }
+
+    public StatoPrenotazione getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoPrenotazione stato) {
+        this.stato = stato;
     }
 
     public double getPrezzoTotale() {
