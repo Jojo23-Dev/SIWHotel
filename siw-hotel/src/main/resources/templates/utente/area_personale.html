@@ -317,9 +317,11 @@
                                    Lascia Recensione
                                 </a>
 
-                                <span th:if="${prenotazione.recensione != null}" class="review-disabled">
-                                    Già recensita &#10003;
-                                </span>
+                               <div th:if="${prenotazione.recensione != null}">
+                                  
+                                    <a th:href="@{/area-personale/recensioni/{id}/modifica(id=${prenotazione.recensione.id})}" class="btn-outline" style="border-color: #ffc107; color: #d39e00;">Modifica Recensione
+                                    </a>
+                                </div>
                                 
                                 <!-- <span th:if="${prenotazione.stato?.name() != 'TERMINATA'}" class="review-disabled" style="font-size: 11px;">
                                     Dopo il soggiorno

@@ -194,6 +194,8 @@
                 <div class="form-group">
                     <label th:for="password">Password</label>
                     <input type="password" id="password" name="password" required placeholder="Inserisci la tua password"/>
+                    <button type="button" onclick="mostraPassword()">Mostra</button>
+
                 </div>
                 <div class="form-group">
                 <a th:href="@{/cambio-password}">Hai dimenticato la password?Da finire</a>
@@ -212,6 +214,18 @@
     <div class="page-footer">
         <p>&copy; 2026 Hotel Grand Luxury - Prenotazioni Online</p>
     </div>
+
+    <script>
+        function mostraPassword(){
+            var p = document.getElementById("password");
+            if(p.type == "password"){
+                p.type = "type";
+            }
+            else{
+                p.type = "password";
+            }
+        }
+    </script>
 
 </body>
 </html>

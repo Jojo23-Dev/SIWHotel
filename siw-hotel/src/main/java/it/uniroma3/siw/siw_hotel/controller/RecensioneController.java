@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import it.uniroma3.siw.siw_hotel.dto.CambioPasswordDto;
+import it.uniroma3.siw.siw_hotel.dto.ModificaRecensioneDto;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Recensione;
 import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 import it.uniroma3.siw.siw_hotel.service.RecensioneService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class RecensioneController {
@@ -79,5 +83,38 @@ public class RecensioneController {
         // Rimanda l'utente alla pagina della prenotazione con un messaggio di successo
         return "redirect:/area-personale/prenotazioni/" + idPrenotazione + "?successo=Recensione inviata!";
     }
+
+
+    @GetMapping("/area-personale/recensioni/{id}/modifica")
+    public String mostraModificaRecensione(@PathVariable("id") Long id,Model model) {
+        
+        //recensione esistente
+        Recensione recensioneEsistente = this.recensioneService.getRecensione(id);
+
+        ModificaRecensioneDto dto = new ModificaRecensioneDto();
+        dto.setTesto(recensioneEsistente.getTesto());
+        dto.setNumeroStelle(recensioneEsistente.getNumeroStelle());
+
+        model.addAttribute("modificaRecensioneDto", dto);
+        model.addAttribute("id", id);
+        
+        return "recensioni/modifica_recensione"; // Cerca templates/cambio-password.html
+    }
+
+    // Salva modifica
+    @PostMapping("/area-personale/recensioni/{id}/modifica")
+    public String postMethodName(@PathVariable("id") Long id,@ModelAttribute("modificaRecensioneDto") ModificaRecensioneDto dto,Model model) {
+        //recensione esistente da modificare
+        Recensione recensioneDaModificare = this.recensioneService.getRecensione(id);
+
+        recensioneDaModificare.setNumeroStelle(dto.getNumeroStelle());
+        recensioneDaModificare.setTesto(dto.getTesto());
+        
+        this.recensioneService.saveRecensione(recensioneDaModificare);
+
+
+        return "redirect:/area-personale/prenotazioni/" + recensioneDaModificare.getPrenotazione().getIdPrenotazione() + "?success=Modificata";
+    }
+    
 
 }
