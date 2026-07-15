@@ -80,7 +80,9 @@
         
         <div class="header-actions">
             <a th:href="@{/area-personale}" class="header-link">Area personale</a>
-            
+            <p sec:authorize="hasAuthority('ADMIN_ROLE')">
+                <a th:href="@{/admin/dashboard}">Dashboard amministratore</a>
+            </p>
             <form th:action="@{/logout}" method="POST" style="margin: 0; display: inline-block;">
                 <button type="submit" class="btn-danger-header">Logout</button>
             </form>

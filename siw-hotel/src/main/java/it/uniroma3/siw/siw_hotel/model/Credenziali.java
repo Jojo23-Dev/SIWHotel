@@ -5,8 +5,11 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import it.uniroma3.siw.siw_hotel.security.Ruolo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,8 +18,6 @@ import jakarta.persistence.Id;
 // in caso agggiungi @NamedQuery
 public class Credenziali implements UserDetails {
 
-    public static final String DEFAULT_ROLE = "DEFAULT";
-    public static final String ADMIN_ROLE = "ADMIN";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +35,9 @@ public class Credenziali implements UserDetails {
     @Column(nullable=false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String ruolo;
+    private Ruolo ruolo;
 
 
 
@@ -51,10 +53,10 @@ public class Credenziali implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getRuolo() {
+    public Ruolo getRuolo() {
         return ruolo;
     }
-    public void setRuolo(String ruolo) {
+    public void setRuolo(Ruolo ruolo) {
         this.ruolo = ruolo;
     }
 

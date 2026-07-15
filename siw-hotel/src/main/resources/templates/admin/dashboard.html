@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Grand Luxury - Pannello di Controllo</title>
+    <style>
+        /* --- STILE BASE (Coerente con il sito) --- */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-outline {
+            padding: 10px 18px;
+            text-decoration: none;
+            color: #0056b3;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #0056b3;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover { background-color: #e6f0fa; }
+        
+        .btn-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover { background-color: #f8d7da; color: #721c24; }
+
+        h1.page-title {
+            color: #002244;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .badge-admin {
+            background-color: #0056b3;
+            color: white;
+            font-size: 14px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            vertical-align: middle;
+        }
+
+        /* --- GRIGLIA DASHBOARD --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .dashboard-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e4e8;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            color: #002244;
+            margin: 0 0 10px 0;
+            font-size: 22px;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            margin: 0 0 25px 0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .btn-action {
+            display: inline-block;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: 0.2s;
+            width: 80%;
+        }
+
+        .btn-action:hover {
+            background-color: #003b80;
+        }
+
+        .page-footer {
+            background-color: #002244;
+            height: 80px;
+            width: 100%;
+            margin-top: auto;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <div class="top-nav">
+            <a class="btn-outline" th:href="@{/}">&larr; Torna al Sito Pubblico</a>
+            
+            <form th:action="@{/logout}" method="POST" style="margin: 0;">
+                <button type="submit" class="btn-outline btn-danger">Esci dal sistema</button>
+            </form>
+        </div>
+
+        <h1 class="page-title">
+            <span>
+                Dashboard amministratore 
+                <span class="badge-admin">Accesso Riservato</span>
+            </span>
+        </h1>
+
+        <p style="color: #555; font-size: 16px;">
+            Benvenuto nel pannello di controllo gestionale. Qui puoi supervisionare tutte le attività dell'hotel.
+        </p>
+
+        <!-- GRIGLIA FUNZIONALITA' -->
+        <div class="dashboard-grid">
+            
+            <!-- CARD PRENOTAZIONI -->
+            <div class="dashboard-card">
+                <div class="card-icon">📅</div>
+                <h3>Prenotazioni</h3>
+                <p>Monitora tutte le prenotazioni ricevute, verifica lo storico e gestisci eventuali cancellazioni lato server.</p>
+                <a th:href="@{/admin/prenotazioni}" class="btn-action">Gestisci Prenotazioni</a>
+            </div>
+
+            <!-- CARD CLIENTI -->
+            <div class="dashboard-card">
+                <div class="card-icon">👥</div>
+                <h3>Anagrafica Clienti</h3>
+                <p>Visualizza l'elenco completo degli utenti registrati al portale con i loro dati di contatto e anagrafici.</p>
+                <a th:href="@{/admin/clienti}" class="btn-action">Elenco Clienti</a>
+            </div>
+
+            <!-- CARD CAMERE -->
+            <div class="dashboard-card">
+                <div class="card-icon">🛏️</div>
+                <h3>Catalogo Camere</h3>
+                <p>Aggiungi nuove tipologie di camere, modifica i prezzi e aggiorna le foto o le dimensioni degli alloggi.</p>
+                <a th:href="@{/camere}" class="btn-action">Gestisci Catalogo</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="page-footer">
+        <p>&copy; 2026 Hotel Grand Luxury - Sistema Gestionale (Backend)</p>
+    </div>
+
+</body>
+</html>

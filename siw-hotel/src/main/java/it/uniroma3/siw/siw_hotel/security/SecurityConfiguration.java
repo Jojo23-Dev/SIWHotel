@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static it.uniroma3.siw.siw_hotel.model.Credenziali.ADMIN_ROLE;
 
 
 @Configuration
@@ -46,14 +45,26 @@ public class SecurityConfiguration {
             authorize.requestMatchers(HttpMethod.GET, "/", "/camere", "/camere/{id}", "/recensioni", "/registrazione","/cambio-password","/area-personale", "/css/**", "/images/**",
                                             "/favicon.ico").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/registrazione", "/login", "/cambio-password").permitAll();
-            authorize.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
-            authorize.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
+            authorize.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(Ruolo.ADMIN_ROLE.name());
+            authorize.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(Ruolo.ADMIN_ROLE.name());
             authorize.anyRequest().authenticated();
         });
 
         httpSecurity.formLogin(form -> {
             form.loginPage("/login").permitAll();
-            form.defaultSuccessUrl("/area-personale", true);
+            form.successHandler((request, response, authentication) -> {
+        
+                // controlliamo se tra i permessi dell'utente c'è ADMIN_ROLE
+                boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals(Ruolo.ADMIN_ROLE.name()));
+
+                // Facciamo il redirect in base al ruolo
+                if (isAdmin) {
+                    response.sendRedirect("/admin/dashboard");
+                    } else {
+                        response.sendRedirect("/area-personale");
+                    }
+                });
             form.failureUrl("/login?error=true");
         });
 

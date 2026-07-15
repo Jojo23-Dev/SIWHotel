@@ -35,6 +35,10 @@ public class PrenotazioneService {
         return this.prenotazioneRepository.findByCliente(utente);
     }
 
+    public List<Prenotazione> getPrenotazioniTutte(){
+        return this.prenotazioneRepository.findAll();
+    }
+
     public void cancellaPrenotazione(Prenotazione prenotazione) {
         this.prenotazioneRepository.delete(prenotazione);
     }

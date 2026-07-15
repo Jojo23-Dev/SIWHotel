@@ -14,6 +14,7 @@ import it.uniroma3.siw.siw_hotel.dto.CambioPasswordDto;
 import it.uniroma3.siw.siw_hotel.dto.RegistrazioneDto;
 import it.uniroma3.siw.siw_hotel.model.Credenziali;
 import it.uniroma3.siw.siw_hotel.model.Utente;
+import it.uniroma3.siw.siw_hotel.security.Ruolo;
 import it.uniroma3.siw.siw_hotel.service.CredenzialiService;
 import it.uniroma3.siw.siw_hotel.service.UtenteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -106,7 +107,7 @@ public class AuthController {
         Credenziali credenziali = new Credenziali();
         credenziali.setUsername(dto.getUsername());
         credenziali.setPassword(passwordEncoder.encode(dto.getPassword()));
-        credenziali.setRuolo("DEFAULT_ROLE");
+        credenziali.setRuolo(Ruolo.DEFAULT_ROLE);
         
         // Salviamo le credenziali nel DB per generare il loro ID
         this.credenzialiService.saveCredenziali(credenziali);

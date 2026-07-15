@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Elenco Camere</title>
@@ -24,12 +25,25 @@
             box-sizing: border-box;
         }
 
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-link {
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
         h1 { color: #333; text-align: center; margin-bottom: 30px; }
 
         /* Griglia delle camere */
         .camere-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
 
@@ -39,14 +53,72 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             border: 1px solid #ddd;
-            text-decoration: none;
             color: #333;
-            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* FONDAMENTALE PER IL LINK ESTESO */
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .camera-card:hover { transform: scale(1.02); border-color: #0056b3; }
+        .camera-card:hover { 
+            transform: translateY(-4px); 
+            border-color: #0056b3; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
 
-        .camera-card h2 { margin-top: 0; color: #0056b3; }
+        /* --- IL TRUCCO DEL LINK ESTESO --- */
+        .card-link {
+            text-decoration: none;
+            color: #0056b3;
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Questo ::after crea uno strato invisibile sopra tutta la card */
+        .card-link::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1; 
+        }
+
+        /* Pulsanti Admin */
+        .card-actions {
+            margin-top: auto; 
+            padding-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative; /* Solleva i bottoni admin */
+            z-index: 2; /* FONDAMENTALE: i bottoni vincono sul link invisibile */
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            flex: 1; /* Fa allargare i pulsanti admin equamente */
+        }
+        
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        
+        .btn-danger { background-color: #dc3545; color: white; width: 100%; }
+        .btn-danger:hover { background-color: #c82333; }
+
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+        }
+        .btn-add:hover { background-color: #218838; }
 
         /* Footer */
         .page-footer {
@@ -64,28 +136,50 @@
 <body>
 
 <div class="page-container">
-      <a th:href="@{/}" class="back-link"><-- Torna alla home</a>
+    
+    <div class="top-bar">
+        <a th:href="@{/}" class="back-link">&larr; Torna alla home</a>
+        
+        <!-- Tasto visibile SOLO all'amministratore -->
+        <div sec:authorize="hasAuthority('ADMIN_ROLE')">
+            <a th:href="@{/admin/camere/aggiungi}" class="btn btn-add">+ Aggiungi Camera</a>
+        </div>
+    </div>
+
     <h1>Elenco Camere</h1>
 
     <div th:if="${camere.isEmpty()}">
-        <p>Non ci sono camere disponibili al momento.</p>
+        <p style="text-align: center; color: #666;">Non ci sono camere disponibili al momento.</p>
     </div>
 
-    <div class="camere-grid">
-        <a th:each="camera : ${camere}" 
-           th:href="@{'/camere/' + ${camera.id}}" 
-           class="camera-card">
+    <div class="camere-grid" th:unless="${camere.isEmpty()}">
+        
+        <div class="camera-card" th:each="camera : ${camere}">
             
-            <h2 th:text="${camera.tipo}">Nome Camera</h2>
-            <p>Tipologia: <span th:text="${camera.tipo}">Standard</span></p>
-            <p>Persone: <span th:text="${camera.persone}">1</span></p>
+            <!-- Il titolo funge da link che copre tutta la card grazie al CSS -->
+            <a th:href="@{'/camere/' + ${camera.id}}" class="card-link" th:text="${camera.tipo}">Nome Camera</a>
             
-        </a>
+            <p style="margin: 5px 0;">Tipologia: <span th:text="${camera.tipo}">Standard</span></p>
+            <p style="margin: 5px 0;">Persone: <span th:text="${camera.persone}">1</span></p>
+            
+            <!-- Area comandi visibile SOLO all'amministratore -->
+            <div class="card-actions" sec:authorize="hasAuthority('ADMIN_ROLE')">
+                <a th:href="@{'/admin/camere/' + ${camera.id} + '/modifica'}" class="btn btn-warning">Modifica</a>
+                
+                <!-- Uso flex: 1 per bilanciare il form con l'ancora (a) della modifica -->
+                <form th:action="@{'/admin/camere/' + ${camera.id} + '/elimina'}" method="POST" style="margin: 0; flex: 1;"
+                      onsubmit="return confirm('Sei sicuro di voler eliminare questa camera?');">
+                    <button type="submit" class="btn btn-danger">Elimina</button>
+                </form>
+            </div>
+            
+        </div>
+
     </div>
 </div>
 
 <div class="page-footer">
-    <p>&copy; Siw Hotel. Tutti i diritti riservati.</p>
+    <p>&copy; 2026 Hotel Grand Luxury. Tutti i diritti riservati.</p>
 </div>
 
 </body>
