@@ -70,6 +70,11 @@
                             <td th:text="${#temporals.format(prenotazione.dataCheckOut, 'dd/MM/yyyy')}">15/08/2026</td>
                             <td th:text="${#numbers.formatDecimal(prenotazione.prezzoTotale, 1, 'COMMA', 2, 'POINT')} + ' €'">150,00 €</td>
                             <td>
+                                <form th:action="@{/admin/prenotazioni/{id}/modifica(id=${prenotazione.idPrenotazione})}" method="GET" style="margin: 0;">
+                                    <button type="submit" class="btn-action">Modifica</button>
+                                </form>
+                            </td>
+                            <td>
                                 <!-- L'admin usa una rotta speciale per forzare la cancellazione -->
                                 <form th:action="@{/admin/prenotazioni/{id}/cancella(id=${prenotazione.idPrenotazione})}" method="POST" style="margin: 0;"
                                       onsubmit="return confirm('ADMIN OVERRIDE: Stai per forzare la cancellazione di questa prenotazione scavalcando le regole cliente. Procedere?');">

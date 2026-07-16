@@ -11,19 +11,9 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("TERMINATA")
 public class StatoPrenotazioneTerminata extends StatoPrenotazione{
 
-    public StatoPrenotazioneTerminata(Prenotazione prenotazione) {
-        super(prenotazione);
-    }
-    protected StatoPrenotazioneTerminata( ) {
-        super();
-    }
     @Override
     public String getNomeVisualizzato() {
         return "Terminata";
     }
 
-    @Override
-    public boolean isCancellabile() {
-        return false; // Impossibile cancellare il passato
-    }
 }

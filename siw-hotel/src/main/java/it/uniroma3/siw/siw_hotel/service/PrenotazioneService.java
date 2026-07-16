@@ -3,7 +3,9 @@ package it.uniroma3.siw.siw_hotel.service;
 import it.uniroma3.siw.siw_hotel.model.Credenziali;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
+import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
 import it.uniroma3.siw.siw_hotel.repository.PrenotazioneRepository;
+import it.uniroma3.siw.siw_hotel.repository.StatoPrenotazioneRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,9 +17,11 @@ import org.springframework.stereotype.Service;
 public class PrenotazioneService {
 
     private PrenotazioneRepository prenotazioneRepository;
+    private StatoPrenotazioneRepository statoPrenotazioneRepository;
 
-    public PrenotazioneService(PrenotazioneRepository prenotazioneRepository) {
+    public PrenotazioneService(PrenotazioneRepository prenotazioneRepository, StatoPrenotazioneRepository statoPrenotazioneRepository) {
         this.prenotazioneRepository = prenotazioneRepository;
+        this.statoPrenotazioneRepository = statoPrenotazioneRepository;
     }
 
     public int contaSovrapposizioni(Long cameraId, LocalDate dataCheckIn, LocalDate dataCheckOut) {
@@ -41,5 +45,9 @@ public class PrenotazioneService {
 
     public void cancellaPrenotazione(Prenotazione prenotazione) {
         this.prenotazioneRepository.delete(prenotazione);
+    }
+
+    public Optional<StatoPrenotazione> getStatoPrenotazioneById(Long id){
+        return this.statoPrenotazioneRepository.findById(id);
     }
 }

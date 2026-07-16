@@ -3,8 +3,11 @@ package it.uniroma3.siw.siw_hotel.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import org.springframework.boot.context.properties.bind.Name;
+
 import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
 import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazioneNonPagata;
+import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +24,8 @@ import jakarta.persistence.OneToOne;
 public class Prenotazione {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_prenotazione")
     private Long idPrenotazione;
 
     @Column(nullable=false)
@@ -40,21 +44,17 @@ public class Prenotazione {
     @JoinColumn(nullable = true)
     private Recensione recensione;
 
-    @OneToOne( cascade = CascadeType.ALL)
+    @ManyToOne // gestisci ( cascade = CascadeType.ALL)
+    @JoinColumn(name = "stato_id")
     private StatoPrenotazione stato;
 
-    
-    public Prenotazione() {
-        this.stato = new StatoPrenotazioneNonPagata(this);//default
+
+    public void paga(PrenotazioneService ps) {
+        this.stato.confermaPagamento(this, ps); // Passa se stessa allo stato
     }
 
-
-    public void paga() {
-        this.stato.confermaPagamento(this); // Passa se stessa allo stato
-    }
-
-    public void termina() {
-        this.stato.terminaSoggiorno(this);
+    public void termina(PrenotazioneService ps) {
+        this.stato.terminaSoggiorno(this, ps);
     }
 
     public StatoPrenotazione getStato() {
@@ -136,6 +136,23 @@ public class Prenotazione {
 
     public void setCamera(Camera camera) {
         this.camera = camera;
+    }
+
+
+
+      // Ogni stato deciderà autonomamente se può essere cancellato o no!
+    public boolean isCancellabile() {
+        if ( !(this.getStato().getNomeVisualizzato().equals("Terminata")) ) {
+            if (this.getDataCheckIn() == null) {
+                return false;
+            }
+            // Calcola i giorni di differenza tra OGGI e la data del Check-in
+            long giorniMancanti = ChronoUnit.DAYS.between(LocalDate.now(), this.getDataCheckIn());
+        
+            // Ritorna true solo se mancano 3 o più giorni
+            return giorniMancanti >= 3;
+        }
+        else return false;
     }
 
     @Override

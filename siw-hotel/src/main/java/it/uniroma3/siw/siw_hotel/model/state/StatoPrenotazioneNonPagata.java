@@ -1,6 +1,8 @@
 package it.uniroma3.siw.siw_hotel.model.state;
 
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
+import it.uniroma3.siw.siw_hotel.repository.PrenotazioneRepository;
+import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -8,12 +10,6 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("NON_PAGATA")
 public class StatoPrenotazioneNonPagata extends StatoPrenotazione {
 
-    public StatoPrenotazioneNonPagata(Prenotazione prenotazione) {
-        super(prenotazione);
-    }
-    protected StatoPrenotazioneNonPagata( ) {
-        super();
-    }
 
     @Override
     public String getNomeVisualizzato() {
@@ -22,8 +18,9 @@ public class StatoPrenotazioneNonPagata extends StatoPrenotazione {
 
 
     @Override
-    public void confermaPagamento(Prenotazione p) {
+    public void confermaPagamento(Prenotazione p, PrenotazioneService ps) {
         // Logica di transizione: se pago, lo stato della prenotazione cambia!
-        p.setStato(new StatoPrenotazionePagata(p));
+        StatoPrenotazione statoIniziale = ps.getStatoPrenotazioneById(1L).get();
+        p.setStato(statoIniziale);
     }
 }

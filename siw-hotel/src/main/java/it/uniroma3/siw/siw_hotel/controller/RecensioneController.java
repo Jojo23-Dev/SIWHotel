@@ -98,12 +98,12 @@ public class RecensioneController {
         model.addAttribute("modificaRecensioneDto", dto);
         model.addAttribute("id", id);
         
-        return "recensioni/modifica_recensione"; // Cerca templates/cambio-password.html
+        return "recensioni/modifica_recensione"; // Cerca templates/modifica_password.html
     }
 
     // Salva modifica
     @PostMapping("/area-personale/recensioni/{id}/modifica")
-    public String postMethodName(@PathVariable("id") Long id,@ModelAttribute("modificaRecensioneDto") ModificaRecensioneDto dto,Model model) {
+    public String modificaRecensione(@PathVariable("id") Long id,@ModelAttribute("modificaRecensioneDto") ModificaRecensioneDto dto,Model model) {
         //recensione esistente da modificare
         Recensione recensioneDaModificare = this.recensioneService.getRecensione(id);
 

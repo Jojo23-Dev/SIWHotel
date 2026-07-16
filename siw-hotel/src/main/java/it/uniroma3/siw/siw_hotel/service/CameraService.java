@@ -35,6 +35,17 @@ public class CameraService {
 		return this.cameraRepository.findAll();
 	}
 
+
+    public Camera saveCamera(Camera camera) {
+        return this.cameraRepository.save(camera);
+        
+	}
+
+	public void eliminaCamera(Camera camera) {
+        this.cameraRepository.delete(camera);
+        
+	}
+
 	// TODO da vedere
     // public List<Camera> getCamereDisponibili(LocalDate checkIn, LocalDate checkOut) {
     //     // TODO Auto-generated method stub

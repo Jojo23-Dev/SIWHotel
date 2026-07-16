@@ -265,7 +265,7 @@
             </div>
 
             <div class="action-area">
-                <div th:if="${prenotazione.stato?.cancellabile}">
+                <div th:if="${prenotazione.cancellabile}">
                     <form th:action="@{/area-personale/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
                         method="POST" 
                         onsubmit="return confirm('Sei assolutamente sicuro di voler cancellare questa prenotazione? Questa azione non può essere annullata.');">
@@ -273,7 +273,7 @@
                     </form>
                 </div>
 
-                <div th:unless="${prenotazione.stato?.cancellabile}">
+                <div th:unless="${prenotazione.cancellabile}">
                     <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; text-align: center;">
                         <strong>Cancellazione non più disponibile.</strong><br>
                         Mancano meno di 3 giorni al check-in. Contatta la reception per urgenze.

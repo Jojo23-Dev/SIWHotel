@@ -21,6 +21,7 @@ import it.uniroma3.siw.siw_hotel.dto.DisponibilitaDto;
 import it.uniroma3.siw.siw_hotel.model.Camera;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
+import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
 import it.uniroma3.siw.siw_hotel.service.CameraService;
 import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 import jakarta.transaction.Transactional;
@@ -115,6 +116,9 @@ public class PrenotazioneController {
         cameraCorrente.aggiungiPrenotazione(prenotazione);
         //manca prenotazione.note
 
+        StatoPrenotazione statoIniziale = this.prenotazioneService.getStatoPrenotazioneById(0L).get();
+        prenotazione.setStato(statoIniziale);
+
         // 3. Calcoli logici del prezzo
         Long notti = ChronoUnit.DAYS.between(dto.getCheckIn(), dto.getCheckOut());
         double prezzoTotale = notti * cameraCorrente.getPrezzo();
@@ -144,7 +148,7 @@ public class PrenotazioneController {
             // controllo di sicurezza: è davvero la sua prenotazione?
             if (prenotazione.getCliente().getId().equals(utenteCorrente.getId())) {
                 
-                if (prenotazione.getStato().isCancellabile()) {
+                if (prenotazione.isCancellabile()) {
                     // sganciamo i collegamenti
                     prenotazione.getCliente().rimuoviPrenotazione(prenotazione);
                     prenotazione.getCamera().rimuoviPrenotazione(prenotazione);

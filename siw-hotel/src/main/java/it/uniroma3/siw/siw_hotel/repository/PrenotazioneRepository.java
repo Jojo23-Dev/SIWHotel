@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
+import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
 
 public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long> {
 
@@ -22,4 +23,7 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long>
 
     public List<Prenotazione> findByCliente(Utente utente);
     
-	}
+
+}
+
+   

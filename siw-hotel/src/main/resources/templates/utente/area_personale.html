@@ -292,7 +292,7 @@
                                 </div>
                                 <div style="display: flex; gap: 10px; align-items: center;">
                                      
-                                    <form th:if="${prenotazione.stato?.cancellabile}" 
+                                    <form th:if="${prenotazione.cancellabile}" 
                                         th:action="@{/area-personale/prenotazioni/{id}/cancella-prenotazione(id=${prenotazione.idPrenotazione})}" 
                                         method="POST" 
                                         style="margin: 0;" 
@@ -303,7 +303,7 @@
                                         </button>
                                     </form>
 
-                                    <div th:unless="${prenotazione.stato?.cancellabile}" 
+                                    <div th:unless="${prenotazione.cancellabile}" 
                                         style="padding: 6px 12px; font-size: 13px; color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 5px; text-align: center;">
                                         Non cancellabile
                                     </div>
