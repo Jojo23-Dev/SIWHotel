@@ -3,5 +3,5 @@ insert into credenziali (username, password, ruolo) values('Michele', '$2a$10$yW
 insert into utente (credenziali_id,data_di_nascita, email, telefono, cognome, nome, nazione) values (1,'2000-01-01', 'admin1@siwhotel.it', '+39 333 1234567', '1', 'Admin', 'Italia');
 insert into utente (credenziali_id,data_di_nascita, email, telefono, cognome, nome, nazione) values (2,'1963-02-17', 'michaeljordan@bulls.com', '+1 333 1234567', 'Giordano', 'Michele', 'Stati Uniti');
 
--- insert into camera(prezzo, dimensione, id,	letti,	persone, descrizione, tipo) values(50.00, 25,	2,	4,	4,	'spaziosa camera quadrupla con backroom nell armadio',	'quadrupla')
--- insert into camera(prezzo, dimensione, id,	letti,	persone, descrizione, tipo) values(30.00,	15,	1,	2,	2,	'splendida camera matrimoniale con vista di merda',	'matrimoniale')
+insert into camera(prezzo, dimensione, id,	letti,	persone, descrizione, tipo) values(50.00, 25,	2,	4,	4,	'spaziosa camera quadrupla con backroom nell armadio',	'quadrupla');
+insert into camera(prezzo, dimensione, id,	letti,	persone, descrizione, tipo) values(30.00,	15,	1,	2,	2,	'splendida camera matrimoniale con vista di merda',	'matrimoniale');

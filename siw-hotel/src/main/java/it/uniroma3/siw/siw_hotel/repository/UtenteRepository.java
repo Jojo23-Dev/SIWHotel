@@ -12,4 +12,6 @@ public interface UtenteRepository extends JpaRepository<Utente,Long> {
     // ha un campo "username" uguale alla stringa passata.
     Utente findByCredenzialiUsername(String username);
 
+    Utente findUtenteByEmail(String email);
+
 }

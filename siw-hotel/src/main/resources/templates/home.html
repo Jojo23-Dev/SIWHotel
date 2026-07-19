@@ -16,6 +16,9 @@
         /* Contenitore interno per allineare in orizzontale i bottoni di destra */
         .header-actions { display: flex; align-items: center; gap: 15px; }
 
+        /* Contenitore per allineare Login e bottone Google */
+        .header-guest-actions { display: flex; align-items: center; gap: 15px; }
+
         /* Stile per i link del menu (Login / Area Personale) */
         .header-link { font-size: 16px; font-weight: bold; color: #0056b3; text-decoration: none; transition: 0.2s;}
         .header-link:hover { text-decoration: underline; }
@@ -24,7 +27,30 @@
         .btn-danger-header { background-color: #dc3545; color: white; border: none; padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .btn-danger-header:hover { background-color: #c82333; }
 
-
+        /* Stile pulsante "Accedi con Google" */
+        .btn-google {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #ffffff;
+            color: #3c4043;
+            border: 1px solid #dadce0;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: box-shadow 0.2s, background-color 0.2s;
+        }
+        .btn-google:hover {
+            background-color: #f7f8f8;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            text-decoration: none;
+        }
+        .btn-google img {
+            width: 18px;
+            height: 18px;
+        }
 
         /* Il contenitore principale della sezione */
         #camere-section { width: 100%; margin-top: 30px; margin-bottom: 30px; box-sizing: border-box; }
@@ -65,17 +91,23 @@
         
     <th:block sec:authorize="!isAuthenticated()">
         <h2>Benvenuto</h2>
-        <a th:href="@{/login}" class="header-link">Login &rarr;</a>
+        <div class="header-guest-actions">
+            <a th:href="@{/login}" class="header-link">Login &rarr;</a>
+            <a th:href="@{/oauth2/authorization/google}" class="btn-google">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                Accedi con Google
+            </a>
+        </div>
     </th:block>
 
     <th:block sec:authorize="isAuthenticated()">
         
         <h2 sec:authorize="hasAuthority('ADMIN_ROLE')">
-            Benvenuto gestore, <span sec:authentication="principal.username">utente</span>
+            Benvenuto gestore, <span th:text="${utente != null ? utente.nome : 'utente'}">utente</span>
         </h2>
 
         <h2 sec:authorize="!hasAuthority('ADMIN_ROLE')">
-            Benvenuto, <span sec:authentication="principal.username">utente</span>
+            Benvenuto, <span th:text="${utente != null ? utente.nome : 'utente'}">utente</span>
         </h2>
         
         <div class="header-actions">
