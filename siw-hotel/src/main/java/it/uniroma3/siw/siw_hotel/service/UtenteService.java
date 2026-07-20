@@ -42,9 +42,4 @@ public class UtenteService {
 		this.utenteRepository.delete(utente);
 	}
 
-    public Utente getUtenteByEmail(String email) {
-    
-		return this.utenteRepository.findUtenteByEmail(email);
-	}
-
 }
