@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.siw_hotel.model.Camera;
@@ -14,6 +16,8 @@ import it.uniroma3.siw.siw_hotel.repository.CameraRepository;
 
 @Service
 public class CameraService {
+
+    public static final int DIMENSIONE_PAGINA = 10;
 
     private CameraRepository cameraRepository;
 	private Camera camera;
@@ -33,6 +37,11 @@ public class CameraService {
 
 	public Iterable<Camera> getCamere() {
 		return this.cameraRepository.findAll();
+	}
+
+	// Pagina 1-based: usata dall'elenco camere al posto di getCamere()
+	public Page<Camera> getPrimi10Camere(int pagina) {
+		return this.cameraRepository.findPrimi10(PageRequest.of(pagina - 1, DIMENSIONE_PAGINA));
 	}
 
 

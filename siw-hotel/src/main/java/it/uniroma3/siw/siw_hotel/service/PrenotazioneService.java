@@ -11,10 +11,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PrenotazioneService {
+
+    public static final int DIMENSIONE_PAGINA = 10;
 
     private PrenotazioneRepository prenotazioneRepository;
     private StatoPrenotazioneRepository statoPrenotazioneRepository;
@@ -41,6 +45,16 @@ public class PrenotazioneService {
 
     public List<Prenotazione> getPrenotazioniTutte(){
         return this.prenotazioneRepository.findAll();
+    }
+
+    // Pagina 1-based: usata dall'elenco admin al posto di getPrenotazioniTutte()
+    public Page<Prenotazione> getUltimi10Prenotazioni(int pagina){
+        return this.prenotazioneRepository.findUltimi10(PageRequest.of(pagina - 1, DIMENSIONE_PAGINA));
+    }
+
+    // Pagina 1-based: usata dallo storico prenotazioni del cliente al posto di getPrenotazioni(utente)
+    public Page<Prenotazione> getUltimi10PrenotazioniDiUtente(Utente utente, int pagina){
+        return this.prenotazioneRepository.findUltimi10DiUtente(utente, PageRequest.of(pagina - 1, DIMENSIONE_PAGINA));
     }
 
     public void cancellaPrenotazione(Prenotazione prenotazione) {

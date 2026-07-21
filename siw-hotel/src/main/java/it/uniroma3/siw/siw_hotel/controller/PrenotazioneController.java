@@ -22,6 +22,7 @@ import it.uniroma3.siw.siw_hotel.model.Camera;
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
 import it.uniroma3.siw.siw_hotel.model.Utente;
 import it.uniroma3.siw.siw_hotel.model.state.StatoPrenotazione;
+import it.uniroma3.siw.siw_hotel.security.Ruolo;
 import it.uniroma3.siw.siw_hotel.service.CameraService;
 import it.uniroma3.siw.siw_hotel.service.PrenotazioneService;
 import jakarta.transaction.Transactional;
@@ -45,13 +46,31 @@ public class PrenotazioneController {
     }
 
     @GetMapping("/area-personale/prenotazioni/{id}")
-    public String apriDettagliPrenotazione(@PathVariable("id") Long prenotazioneId, Model model) {
-        
+    public String apriDettagliPrenotazione(@PathVariable("id") Long prenotazioneId, Model model, RedirectAttributes redirectAttributes) {
+
         Optional<Prenotazione> prenotazioneOptional = this.prenotazioneService.getPrenotazione(prenotazioneId);
         if (prenotazioneOptional.isEmpty()) {
-            return "redirect:/prenotazioni";
+            // FIX: "/prenotazioni" non è una rotta esistente, portava a 404
+            return "redirect:/area-personale/prenotazioni";
         }
         Prenotazione prenotazione = prenotazioneOptional.get();
+
+        // FIX: controllo di sicurezza mancante. Prima chiunque fosse autenticato poteva vedere
+        // i dettagli di QUALSIASI prenotazione conoscendone/indovinandone l'id. Ora è consentito
+        // solo al cliente proprietario o a un admin.
+        Utente utenteCorrente = this.globalController.getUtente();
+        boolean isProprietario = prenotazione.getCliente() != null
+                && utenteCorrente != null
+                && prenotazione.getCliente().getId().equals(utenteCorrente.getId());
+        boolean isAdmin = utenteCorrente != null
+                && utenteCorrente.getCredenziali() != null
+                && utenteCorrente.getCredenziali().getRuolo() == Ruolo.ADMIN_ROLE;
+
+        if (!isProprietario && !isAdmin) {
+            redirectAttributes.addFlashAttribute("errore", "Prenotazione non trovata nel sistema.");
+            return "redirect:/area-personale/prenotazioni";
+        }
+
         model.addAttribute("prenotazione", prenotazione);
 
         return "camera/prenotazione";
@@ -114,7 +133,9 @@ public class PrenotazioneController {
         Camera cameraCorrente = this.cameraService.getCamera(cameraId).get();
         prenotazione.setCamera(cameraCorrente);
         cameraCorrente.aggiungiPrenotazione(prenotazione);
-        //manca prenotazione.note
+
+        // Salviamo le eventuali note inserite dal cliente nel form di conferma
+        prenotazione.setNote(dto.getNote());
 
         StatoPrenotazione statoIniziale = this.prenotazioneService.getStatoPrenotazioneById(0L).get();
         prenotazione.setStato(statoIniziale);

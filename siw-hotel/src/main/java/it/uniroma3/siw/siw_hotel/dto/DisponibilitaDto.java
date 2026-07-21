@@ -8,6 +8,7 @@ public class DisponibilitaDto {
     private LocalDate dataCheckIn;
     private LocalDate dataCheckOut;
     private double prezzoTotale;
+    private String note;
 
     // Genera qui i costruttori, Getter e Setter!
 
@@ -27,4 +28,6 @@ public class DisponibilitaDto {
     public void setCheckIn(LocalDate dataCheckIn) { this.dataCheckIn = dataCheckIn; }
     public LocalDate getCheckOut() { return dataCheckOut; }
     public void setCheckOut(LocalDate dataCheckOut) { this.dataCheckOut = dataCheckOut; }
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
 }

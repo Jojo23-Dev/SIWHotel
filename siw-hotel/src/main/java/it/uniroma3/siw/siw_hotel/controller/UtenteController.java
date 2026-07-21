@@ -1,6 +1,7 @@
 package it.uniroma3.siw.siw_hotel.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -70,16 +72,17 @@ public class UtenteController {
 
    
     @GetMapping("/area-personale/prenotazioni")
-    public String apriPrenotazioni(Model model) {
+    public String apriPrenotazioni(@RequestParam(value = "pagina", defaultValue = "1") int pagina, Model model) {
         // Non devi fare assolutamente nulla qui!
         // L'oggetto "utente" è già stato inserito nel Model dal GlobalController.
         Utente utenteCorrente = this.globalController.getUtente();
-        // Passiamo la lista delle prenotazioni al Model
-        List<Prenotazione> miePrenotazioni = this.prenotazioneService.getPrenotazioni(utenteCorrente);
-        
-        if(!miePrenotazioni.isEmpty() || miePrenotazioni!=null){
-            model.addAttribute("prenotazioni", miePrenotazioni);
-        }
+        // Passiamo solo la pagina richiesta (10 prenotazioni più recenti) al Model
+        Page<Prenotazione> paginaPrenotazioni = this.prenotazioneService.getUltimi10PrenotazioniDiUtente(utenteCorrente, pagina);
+
+        model.addAttribute("prenotazioni", paginaPrenotazioni.getContent());
+        model.addAttribute("paginaCorrente", pagina);
+        model.addAttribute("totalePagine", paginaPrenotazioni.getTotalPages());
+        model.addAttribute("totaleElementi", paginaPrenotazioni.getTotalElements());
         return "camera/prenotazioni";
     }
 }

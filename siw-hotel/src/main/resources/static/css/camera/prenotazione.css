@@ -1,0 +1,207 @@
+/* --- STILE BASE --- */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .page-container {
+            max-width: 800px; /* Leggermente più stretto per un effetto "ricevuta" */
+            margin: 40px auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- NAVIGAZIONE TOP --- */
+        .top-nav {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .btn-outline {
+            padding: 10px 18px;
+            text-decoration: none;
+            color: #0056b3;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #0056b3;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover { background-color: #e6f0fa; }
+
+        /* --- CARD DETTAGLIO --- */
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e4e8;
+            margin-bottom: 25px;
+        }
+
+        .header-ricevuta {
+            text-align: center;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-ricevuta h1 {
+            color: #002244;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .header-ricevuta p {
+            color: #555;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .section-title {
+            color: #0056b3;
+            font-size: 20px;
+            margin: 0 0 15px 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        /* --- DATI LISTA --- */
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Due colonne per affiancare i dati */
+            gap: 15px 30px;
+            margin-bottom: 30px;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+
+        .data-label { 
+            font-size: 13px;
+            font-weight: bold; 
+            color: #777; 
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .data-value { 
+            font-size: 16px;
+            color: #222; 
+            font-weight: 500;
+        }
+
+        .descrizione-camera {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* --- ZONA TOTALE E AZIONI --- */
+        .totale-box {
+            background-color: #e6f0fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: right;
+            margin-bottom: 30px;
+            border: 1px solid #cce0f5;
+        }
+
+        .totale-box span {
+            font-size: 18px;
+            color: #002244;
+        }
+
+        .totale-box .importo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0056b3;
+            margin-left: 15px;
+        }
+
+        .action-area {
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-danger:hover { background-color: #c82333; }
+
+        /* --- FOOTER --- */
+        .page-footer {
+            background-color: #002244;
+            height: 80px;
+            width: 100%;
+            margin-top: auto;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Stili Spia Stato in alto a destra */
+        .status-badge-large {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status-non-pagata { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .status-pagata { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-terminata { background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+
+        /* Stili Pulsante Recensione in basso */
+        .btn-review-large {
+            background-color: #ffc107;
+            color: #856404;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .btn-review-large:hover { background-color: #e0a800; }
+
+.note-box {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+

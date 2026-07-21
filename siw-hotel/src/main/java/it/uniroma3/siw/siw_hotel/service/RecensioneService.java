@@ -2,6 +2,8 @@ package it.uniroma3.siw.siw_hotel.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.siw_hotel.model.Prenotazione;
@@ -11,6 +13,9 @@ import it.uniroma3.siw.siw_hotel.repository.RecensioneRepository;
 
 @Service
 public class RecensioneService {
+
+    public static final int DIMENSIONE_PAGINA = 10;
+
     private RecensioneRepository recensioneRepository;
 
     public RecensioneService(RecensioneRepository recensioneRepository) {

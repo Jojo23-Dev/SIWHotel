@@ -3,6 +3,7 @@ package it.uniroma3.siw.siw_hotel.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.siw_hotel.dto.RegistrazioneDto;
@@ -46,14 +48,22 @@ public class AdminController {
     }
 
     @GetMapping("/prenotazioni")
-    public String elencoPrenotazioni(Model model) {
-        model.addAttribute("prenotazioni", this.prenotazioneService.getPrenotazioniTutte()); 
+    public String elencoPrenotazioni(@RequestParam(value = "pagina", defaultValue = "1") int pagina, Model model) {
+        Page<Prenotazione> paginaPrenotazioni = this.prenotazioneService.getUltimi10Prenotazioni(pagina);
+        model.addAttribute("prenotazioni", paginaPrenotazioni.getContent());
+        model.addAttribute("paginaCorrente", pagina);
+        model.addAttribute("totalePagine", paginaPrenotazioni.getTotalPages());
+        model.addAttribute("totaleElementi", paginaPrenotazioni.getTotalElements());
         return "admin/prenotazioni";
     }
 
     @GetMapping("/clienti")
-    public String elencoClienti(Model model) {
-        model.addAttribute("clienti", this.utenteService.getUtenti()); 
+    public String elencoClienti(@RequestParam(value = "pagina", defaultValue = "1") int pagina, Model model) {
+        Page<Utente> paginaClienti = this.utenteService.getPrimi10Utenti(pagina);
+        model.addAttribute("clienti", paginaClienti.getContent());
+        model.addAttribute("paginaCorrente", pagina);
+        model.addAttribute("totalePagine", paginaClienti.getTotalPages());
+        model.addAttribute("totaleElementi", paginaClienti.getTotalElements());
         return "admin/clienti";
     }
 
@@ -89,8 +99,9 @@ public class AdminController {
         
         this.prenotazioneService.savePrenotazione(prenotazioneDaModificare);
 
-
-        return "redirect:/admin/prenotazione/" + prenotazioneDaModificare.getIdPrenotazione() + "?success=Modificata";
+        // FIX: la rotta "/admin/prenotazione/{id}" non esiste (il dettaglio prenotazione vive sotto
+        // /area-personale/prenotazioni/{id}), quindi il redirect andava in 404. Torniamo all'elenco admin.
+        return "redirect:/admin/prenotazioni?success=Modificata";
     }
     
     @GetMapping("/camere/{id}/modifica")

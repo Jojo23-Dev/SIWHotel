@@ -3,6 +3,8 @@ package it.uniroma3.siw.siw_hotel.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +24,16 @@ public interface PrenotazioneRepository extends JpaRepository<Prenotazione,Long>
     );
 
     public List<Prenotazione> findByCliente(Utente utente);
-    
+
+    // Usate dalle viste con elenco al posto di findAll(): restituiscono solo la "pagina" richiesta (10 elementi)
+
+    // Elenco admin: le prenotazioni più recenti per prime
+    @Query("SELECT p FROM Prenotazione p ORDER BY p.idPrenotazione DESC")
+    Page<Prenotazione> findUltimi10(Pageable pageable);
+
+    // Storico prenotazioni di un singolo cliente: le più recenti per prime
+    @Query("SELECT p FROM Prenotazione p WHERE p.cliente = :cliente ORDER BY p.idPrenotazione DESC")
+    Page<Prenotazione> findUltimi10DiUtente(@Param("cliente") Utente cliente, Pageable pageable);
 
 }
 
